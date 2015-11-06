@@ -79,6 +79,7 @@ class AMS5812{
     double _tMin;
     double _tMax;
     void getTransducer();
+    uint16_t readPressureBytes();
     void readBytes(uint16_t* pressureCounts, uint16_t* temperatureCounts);
 };
 

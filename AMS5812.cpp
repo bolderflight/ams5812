@@ -44,6 +44,21 @@ void AMS5812::readBytes(uint16_t* pressureCounts, uint16_t* temperatureCounts){
   *temperatureCounts = (((uint16_t) (b[2]&0x7F)) <<8) + (((uint16_t) b[3]));
 }
 
+/* reads pressure and returns values in counts */
+uint16_t AMS5812::readPressureBytes(){
+  byte b[2]; // buffer
+
+  // 2 bytes from address
+  Wire.requestFrom(_address,4); 
+  
+  // put the data in buffer
+  b[0] = Wire.read(); 
+  b[1] = Wire.read();
+
+  // assemble into a uint16_t
+  return (((uint16_t) (b[0]&0x7F)) <<8) + (((uint16_t) b[1]));
+}
+
 /* sets the pressure and temperature range based on the chip */
 void AMS5812::getTransducer(){
 
@@ -170,10 +185,9 @@ double AMS5812::getPressure(){
   uint16_t digOutPmax = 29491;  // digital output at maximum pressure
   double pressure;  // pressure, pa
   uint16_t pressureCounts; // pressure digital output, counts
-  uint16_t temperatureCounts; // temperature digital output, counts
 
-  // get pressure and temperature off transducer
-  readBytes(&pressureCounts, &temperatureCounts);
+  // get pressure off transducer
+  pressureCounts = readPressureBytes();
 
   // convert counts to pressure, PA
   pressure = ((pressureCounts - digOutPmin)/((digOutPmax - digOutPmin)/(_pMax - _pMin)) + _pMin) * PSI2PA;
