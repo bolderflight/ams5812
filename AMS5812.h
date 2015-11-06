@@ -12,11 +12,11 @@
 class AMS5812{
   public:
     AMS5812(int address, String type);
-    boolean begin();
+    void begin();
   private:
     int _address;
     String _type;
-    uint16_t readPresRegister();
+    void readBytes(uint16_t* pressureCounts, uint16_t* temperatureCounts);
 };
 
 #endif
