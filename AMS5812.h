@@ -10,11 +10,13 @@
 #include "Arduino.h"
 
 class AMS5812{
-	public:
-		AMS5812(int address);
-		void initialize();
-	private:
-		int _address;
-}
+  public:
+    AMS5812(int address, String type);
+    boolean begin();
+  private:
+    int _address;
+    String _type;
+    uint16_t readPresRegister();
+};
 
 #endif
