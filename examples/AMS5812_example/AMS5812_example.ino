@@ -2,7 +2,7 @@
 // title:     AMS5812_example.ino
 // author:    Taylor, Brian R.
 // email:     brian.taylor@bolderflight.com
-// date:      2015-11-05 
+// date:      2015-11-20 
 // license: 
 //
 
@@ -25,8 +25,8 @@ void setup() {
 }
 
 void loop() {
-  double pressure;
-  double temperature;
+  double pressure, temperature;
+  uint16_t pressureCounts, temperatureCounts;
 
   // getting both the temperature (C) and pressure (PA)
   staticPress.getData(&pressure,&temperature);
@@ -39,16 +39,23 @@ void loop() {
 
   // getting just the pressure, PA
   pressure = staticPress.getPressure();
-  delay(100);
+  delay(10);
 
   // getting just the temperature, C
   temperature = staticPress.getTemperature();
-  delay(100);
+  delay(10);
 
   // displaying the data
   Serial.print(pressure,6);
   Serial.print("\t");
   Serial.println(temperature,6);
+  delay(100);
+
+  // getting the raw counts
+  staticPress.readBytes(&pressureCounts, &temperatureCounts);
+  Serial.print(pressureCounts);
+  Serial.print("\t");
+  Serial.println(temperatureCounts);
   delay(100);
 }
 

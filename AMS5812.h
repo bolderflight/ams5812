@@ -2,7 +2,7 @@
 // title:     AMS5812.h
 // author:    Taylor, Brian R.
 // email:     brian.taylor@bolderflight.com
-// date:      2015-11-05 
+// date:      2015-11-20 
 // license: 
 //
 
@@ -71,6 +71,7 @@ class AMS5812{
     double getPressure();
     double getTemperature();
     void getData(double* pressure, double* temperature);
+    void readBytes(uint16_t* pressureCounts, uint16_t* temperatureCounts);
   private:
     int _address;
     String _type;
@@ -80,7 +81,6 @@ class AMS5812{
     double _tMax;
     void getTransducer();
     uint16_t readPressureBytes();
-    void readBytes(uint16_t* pressureCounts, uint16_t* temperatureCounts);
 };
 
 #endif
