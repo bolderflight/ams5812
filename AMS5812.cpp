@@ -2,7 +2,7 @@
 // title:     AMS5812.cpp
 // author:    Taylor, Brian R.
 // email:     brian.taylor@bolderflight.com
-// date:      2015-11-05 
+// date:      2016-03-30 
 // license: 
 //
 
@@ -11,8 +11,9 @@
 #include <i2c_t3.h>  // I2C library
 
 /* AMS5812 object, input the I2C address and chip name (i.e. "AMS5812-0150-B") */
-AMS5812::AMS5812(int address, String type){
+AMS5812::AMS5812(int address, int bus, String type){
   _address = address; // I2C address
+  _bus = bus; // I2C bus
   _type = type; // string, transducer type
 }
 
@@ -20,7 +21,12 @@ AMS5812::AMS5812(int address, String type){
 void AMS5812::begin(){
 
   // starting the I2C
-  Wire.begin(I2C_MASTER, 0, I2C_PINS_18_19, I2C_PULLUP_EXT, I2C_RATE_400);
+  if(_bus == 1){
+    Wire1.begin(I2C_MASTER, 0, I2C_PINS_29_30, I2C_PULLUP_EXT, I2C_RATE_400);
+  }
+  else{
+    Wire.begin(I2C_MASTER, 0, I2C_PINS_18_19, I2C_PULLUP_EXT, I2C_RATE_400);
+  }
 
   // setting the min and max pressure and temperature based on the chip
   getTransducer();
@@ -30,14 +36,26 @@ void AMS5812::begin(){
 void AMS5812::readBytes(uint16_t* pressureCounts, uint16_t* temperatureCounts){
   byte b[4]; // buffer
 
-  // 4 bytes from address
-  Wire.requestFrom(_address,4); 
+  if(_bus == 1){
+  	// 4 bytes from address
+    Wire1.requestFrom(_address,4); 
   
-  // put the data in buffer
-  b[0] = Wire.read(); 
-  b[1] = Wire.read();
-  b[2] = Wire.read();
-  b[3] = Wire.read();
+    // put the data in buffer
+    b[0] = Wire1.read(); 
+    b[1] = Wire1.read();
+    b[2] = Wire1.read();
+    b[3] = Wire1.read();
+  }
+  else{
+    // 4 bytes from address
+    Wire.requestFrom(_address,4); 
+  
+    // put the data in buffer
+    b[0] = Wire.read(); 
+    b[1] = Wire.read();
+    b[2] = Wire.read();
+    b[3] = Wire.read();
+  }
 
   // assemble into a uint16_t
   *pressureCounts = (((uint16_t) (b[0]&0x7F)) <<8) + (((uint16_t) b[1]));
@@ -48,12 +66,22 @@ void AMS5812::readBytes(uint16_t* pressureCounts, uint16_t* temperatureCounts){
 uint16_t AMS5812::readPressureBytes(){
   byte b[2]; // buffer
 
-  // 2 bytes from address
-  Wire.requestFrom(_address,4); 
+  if(_bus == 1){
+    // 2 bytes from address
+    Wire1.requestFrom(_address,4); 
   
-  // put the data in buffer
-  b[0] = Wire.read(); 
-  b[1] = Wire.read();
+    // put the data in buffer
+    b[0] = Wire1.read(); 
+    b[1] = Wire1.read();
+  }
+  else{
+    // 2 bytes from address
+    Wire.requestFrom(_address,4); 
+  
+    // put the data in buffer
+    b[0] = Wire.read(); 
+    b[1] = Wire.read();
+  }
 
   // assemble into a uint16_t
   return (((uint16_t) (b[0]&0x7F)) <<8) + (((uint16_t) b[1]));
@@ -230,4 +258,3 @@ void AMS5812::getData(double* pressure, double* temperature){
   // convert counts to temperature, C
   *temperature = ((temperatureCounts - digOutTmin)/((digOutTmax - digOutTmin)/(_tMax - _tMin)) + _tMin);
 }
-
