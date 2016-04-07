@@ -66,7 +66,7 @@
 
 class AMS5812{
   public:
-    AMS5812(int address, int bus, String type);
+    AMS5812(int address, int bus, String chip, String type);
     void begin();
     double getPressure();
     double getTemperature();
@@ -75,6 +75,7 @@ class AMS5812{
   private:
     int _address;
     int _bus;
+    String _chip;
     String _type;
     double _pMin;
     double _pMax;

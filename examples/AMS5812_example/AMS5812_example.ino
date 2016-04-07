@@ -12,9 +12,9 @@
 // an AMS5812 object, which is a
 // static pressure sensure at I2C
 // address of 0x10, on the Teensy
-// 3.1 I2C bus 1 (pins 29 and 30)
+// LC I2C bus 1 (pins 22 and 23)
 // and is a AMS5812-0150-B
-AMS5812 staticPress(0x10,1,"AMS5812-0150-B");
+AMS5812 staticPress(0x10,1,"teensyLC","AMS5812-0150-B");
 
 void setup() {
   // serial to display data
