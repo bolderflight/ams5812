@@ -2,7 +2,7 @@
 AMS5812.cpp
 Brian R Taylor
 brian.taylor@bolderflight.com
-2016-03-30
+2016-08-11
 
 Copyright (c) 2016 Bolder Flight Systems
 
@@ -26,11 +26,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include "AMS5812.h"
 #include <i2c_t3.h>  // I2C library
 
-/* AMS5812 object, input the I2C address and chip name (i.e. "AMS5812-0150-B") */
-AMS5812::AMS5812(int address, int bus, String chip, String type){
+/* AMS5812 object, input the I2C address, I2C bus, and chip name (i.e. "AMS5812-0150-B") */
+AMS5812::AMS5812(int address, int bus, String type){
   _address = address; // I2C address
   _bus = bus; // I2C bus
-  _chip = chip; // string, teensy3.X vs teensyLC
   _type = type; // string, transducer type
 }
 
@@ -38,10 +37,7 @@ AMS5812::AMS5812(int address, int bus, String chip, String type){
 void AMS5812::begin(){
 
   // starting the I2C
-  if((_bus == 1)&&(_chip.equals("teensyLC"))) {
-    Wire1.begin(I2C_MASTER, 0, I2C_PINS_22_23, I2C_PULLUP_EXT, I2C_RATE_400);
-  }
-  else if(_bus == 1) {
+  if(_bus == 1) {
   	Wire1.begin(I2C_MASTER, 0, I2C_PINS_29_30, I2C_PULLUP_EXT, I2C_RATE_400);
   }
   else{

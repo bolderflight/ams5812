@@ -2,7 +2,7 @@
 AMS5812.h
 Brian R Taylor
 brian.taylor@bolderflight.com
-2016-03-30
+2016-08-11
 
 Copyright (c) 2016 Bolder Flight Systems
 
@@ -82,7 +82,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
 class AMS5812{
   public:
-    AMS5812(int address, int bus, String chip, String type);
+    AMS5812(int address, int bus, String type);
     void begin();
     double getPressure();
     double getTemperature();
@@ -91,7 +91,6 @@ class AMS5812{
   private:
     int _address;
     int _bus;
-    String _chip;
     String _type;
     double _pMin;
     double _pMax;
