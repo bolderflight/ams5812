@@ -12,17 +12,17 @@ This library uses the [i2c_t3 enhanced I2C library](https://github.com/nox771/i2
 Simply clone or download and extract the zipped library into your Arduino/libraries folder.
 
 **AMS5812(int address, int bus, String type)**
-An AMS5812 object should be declared, specifying the AMS 5812 I2C address, the I2C bus, and the AMS 5812 sensor type. For example, the following code declares an AMS5812 object called *press* with an AMS5812-0008-D sensor located on I2C bus 0 and an I2C address of 0x06:
+An AMS5812 object should be declared, specifying the AMS 5812 I2C address, the I2C bus, and the AMS 5812 sensor type. For example, the following code declares an AMS5812 object called *dPress* with an AMS5812-0008-D sensor located on I2C bus 0 and an I2C address of 0x06:
 
 ```C++
-AMS5812 press(0x06,0,"AMS5812-0008-D");
+AMS5812 dPress(0x06,0,"AMS5812-0008-D");
 ```
 
 **void begin()**
 This should be called in your setup function. It initializes the I2C communication and sets the minimum and maximum pressure and temperature values based on the AMS 5812 sensor.
 
 ```C++
-press.begin();
+dPress.begin();
 ```
 
 **double getPressure()**
@@ -30,7 +30,7 @@ press.begin();
 
 ```C++
 double pressure;
-pressure = press.getPressure();
+pressure = dPress.getPressure();
 ```
 
 **double getTemperature()**
@@ -38,7 +38,7 @@ pressure = press.getPressure();
 
 ```C++
 double temperature;
-temperature = press.getTemperature();
+temperature = dPress.getTemperature();
 ```
 
 **void getData(double* pressure, double* temperature)**
@@ -46,7 +46,7 @@ temperature = press.getTemperature();
 
 ```C++
 double pressure, temperature;
-press.getData(&pressure, &temperature);
+dPress.getData(&pressure,&temperature);
 ```
 
 # Wiring and Pullups
