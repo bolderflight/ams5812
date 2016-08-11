@@ -87,7 +87,6 @@ class AMS5812{
     double getPressure();
     double getTemperature();
     void getData(double* pressure, double* temperature);
-    void readBytes(uint16_t* pressureCounts, uint16_t* temperatureCounts);
   private:
     int _address;
     int _bus;
@@ -98,6 +97,7 @@ class AMS5812{
     double _tMax;
     void getTransducer();
     uint16_t readPressureBytes();
+    void readBytes(uint16_t* pressureCounts, uint16_t* temperatureCounts);
 };
 
 #endif
