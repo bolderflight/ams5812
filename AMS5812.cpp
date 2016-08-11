@@ -234,7 +234,7 @@ double AMS5812::getPressure(){
   pressureCounts = readPressureBytes();
 
   // convert counts to pressure, PA
-  pressure = ((pressureCounts - digOutPmin)/((digOutPmax - digOutPmin)/(_pMax - _pMin)) + _pMin) * PSI2PA;
+  pressure = ((pressureCounts - digOutPmin)/((digOutPmax - digOutPmin)/(_pMax - _pMin)) + _pMin) * _psi2pa;
 
   return pressure;
 }
@@ -269,7 +269,7 @@ void AMS5812::getData(double* pressure, double* temperature){
   readBytes(&pressureCounts, &temperatureCounts);
 
   // convert counts to pressure, PA
-  *pressure = ((pressureCounts - digOutPmin)/((digOutPmax - digOutPmin)/(_pMax - _pMin)) + _pMin) * PSI2PA;
+  *pressure = ((pressureCounts - digOutPmin)/((digOutPmax - digOutPmin)/(_pMax - _pMin)) + _pMin) * _psi2pa;
 
   // convert counts to temperature, C
   *temperature = ((temperatureCounts - digOutTmin)/((digOutTmax - digOutTmin)/(_tMax - _tMin)) + _tMin);

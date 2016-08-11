@@ -77,9 +77,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #define AMS5812_T_MIN -25.0
 #define AMS5812_T_MAX 85.0
 
-// conversion PSI to PA
-#define PSI2PA 6894.76
-
 class AMS5812{
   public:
     AMS5812(int address, int bus, String type);
@@ -95,6 +92,7 @@ class AMS5812{
     double _pMax;
     double _tMin;
     double _tMax;
+    const double _psi2pa = 4.4482216152605/(0.0254*0.0254); // conversion PSI to PA
     void getTransducer();
     uint16_t readPressureBytes();
     void readBytes(uint16_t* pressureCounts, uint16_t* temperatureCounts);
