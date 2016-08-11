@@ -42,7 +42,7 @@ temperature = dPress.getTemperature();
 ```
 
 **void getData(double* pressure, double* temperature)**
-*getData(double* pressure, double* temperature)* samples the AMS 5812 sensor and returns the pressure measurement as a double with units of Pascal (Pa) and temperature measurement as a double with units of Celsius (C).
+*getData(double&ast; pressure, double&ast; temperature)* samples the AMS 5812 sensor and returns the pressure measurement as a double with units of Pascal (Pa) and temperature measurement as a double with units of Celsius (C).
 
 ```C++
 double pressure, temperature;
