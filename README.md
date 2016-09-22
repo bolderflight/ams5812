@@ -11,7 +11,7 @@ This library uses the [i2c_t3 enhanced I2C library](https://github.com/nox771/i2
 
 Simply clone or download and extract the zipped library into your Arduino/libraries folder.
 
-**AMS5812(int address, int bus, String type)**
+**AMS5812(uint8_t address, uint8_t bus, String type)**
 An AMS5812 object should be declared, specifying the AMS 5812 I2C address, the I2C bus, and the AMS 5812 sensor type. For example, the following code declares an AMS5812 object called *dPress* with an AMS5812-0008-D sensor located on I2C bus 0 and an I2C address of 0x06:
 
 ```C++

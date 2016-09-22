@@ -29,23 +29,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
 class AMS5812{
   public:
-    AMS5812(int address, int bus, String type);
+    AMS5812(uint8_t address, uint8_t bus, String type);
     void begin();
     float getPressure();
     float getTemperature();
     void getData(float* pressure, float* temperature);
   private:
-    int _address;
-    int _bus;
+    uint8_t _address;
+    uint8_t _bus;
     String _type;
     float _pMin;
     float _pMax;
     float _tMin;
     float _tMax;
-    const float _psi2pa = 4.4482216152605f/(0.0254f*0.0254f); // conversion PSI to PA
-    void getTransducer();
-    uint16_t readPressureBytes();
-    void readBytes(uint16_t* pressureCounts, uint16_t* temperatureCounts);
+    
+	// conversion PSI to PA
+    const float _psi2pa = 4.4482216152605f/(0.0254f*0.0254f); 
 
     // min and max pressures, PSI
 	const float AMS5812_0000_D_P_MIN = 0.0f;
@@ -96,6 +95,10 @@ class AMS5812{
 	// temperature ranges, C
 	const float AMS5812_T_MIN = -25.0f;
 	const float AMS5812_T_MAX = 85.0f;
+
+	void getTransducer();
+    uint16_t readPressureBytes();
+    void readBytes(uint16_t* pressureCounts, uint16_t* temperatureCounts);
 };
 
 #endif
