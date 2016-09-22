@@ -27,56 +27,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
 #include "Arduino.h"
 
-// min and max pressures, PSI
-#define AMS5812_0000_D_P_MIN 0.0
-#define AMS5812_0000_D_P_MAX 0.075
-#define AMS5812_0001_D_P_MIN 0.0
-#define AMS5812_0001_D_P_MAX 0.15
-#define AMS5812_0000_D_B_P_MIN -0.075
-#define AMS5812_0000_D_B_P_MAX 0.075
-#define AMS5812_0001_D_B_P_MIN -0.15
-#define AMS5812_0001_D_B_P_MAX 0.15
-#define AMS5812_0003_D_P_MIN 0.0
-#define AMS5812_0003_D_P_MAX 0.3
-#define AMS5812_0008_D_P_MIN 0.0
-#define AMS5812_0008_D_P_MAX 0.8
-#define AMS5812_0015_D_P_MIN 0.0
-#define AMS5812_0015_D_P_MAX 1.5
-#define AMS5812_0003_D_B_P_MIN -0.3
-#define AMS5812_0003_D_B_P_MAX 0.3
-#define AMS5812_0008_D_B_P_MIN -0.8
-#define AMS5812_0008_D_B_P_MAX 0.8
-#define AMS5812_0015_D_B_P_MIN -1.5
-#define AMS5812_0015_D_B_P_MAX 1.5
-#define AMS5812_0030_D_P_MIN 0.0
-#define AMS5812_0030_D_P_MAX 3.0
-#define AMS5812_0050_D_P_MIN 0.0
-#define AMS5812_0050_D_P_MAX 5.0
-#define AMS5812_0150_D_P_MIN 0.0
-#define AMS5812_0150_D_P_MAX 15.0
-#define AMS5812_0300_D_P_MIN 0.0
-#define AMS5812_0300_D_P_MAX 30.0
-#define AMS5812_0600_D_P_MIN 0.0
-#define AMS5812_0600_D_P_MAX 60.0
-#define AMS5812_1000_D_P_MIN 0.0
-#define AMS5812_1000_D_P_MAX 100.0
-#define AMS5812_0030_D_B_P_MIN -3.0
-#define AMS5812_0030_D_B_P_MAX 3.0
-#define AMS5812_0050_D_B_P_MIN -5.0
-#define AMS5812_0050_D_B_P_MAX 5.0
-#define AMS5812_0150_D_B_P_MIN -15.0
-#define AMS5812_0150_D_B_P_MAX 15.0
-#define AMS5812_0150_B_P_MIN 11.0
-#define AMS5812_0150_B_P_MAX 17.5
-#define AMS5812_0150_A_P_MIN 0.0
-#define AMS5812_0150_A_P_MAX 15.0
-#define AMS5812_0300_A_P_MIN 0.0
-#define AMS5812_0300_A_P_MAX 30.0
-
-// temperature ranges, C
-#define AMS5812_T_MIN -25.0
-#define AMS5812_T_MAX 85.0
-
 class AMS5812{
   public:
     AMS5812(int address, int bus, String type);
@@ -96,6 +46,56 @@ class AMS5812{
     void getTransducer();
     uint16_t readPressureBytes();
     void readBytes(uint16_t* pressureCounts, uint16_t* temperatureCounts);
+
+    // min and max pressures, PSI
+	const float AMS5812_0000_D_P_MIN = 0.0f;
+	const float AMS5812_0000_D_P_MAX = 0.075f;
+	const float AMS5812_0001_D_P_MIN = 0.0f;
+	const float AMS5812_0001_D_P_MAX = 0.15f;
+	const float AMS5812_0000_D_B_P_MIN = -0.075f;
+	const float AMS5812_0000_D_B_P_MAX = 0.075f;
+	const float AMS5812_0001_D_B_P_MIN = -0.15f;
+	const float AMS5812_0001_D_B_P_MAX = 0.15f;
+	const float AMS5812_0003_D_P_MIN = 0.0f;
+	const float AMS5812_0003_D_P_MAX = 0.3f;
+	const float AMS5812_0008_D_P_MIN = 0.0f;
+	const float AMS5812_0008_D_P_MAX = 0.8f;
+	const float AMS5812_0015_D_P_MIN = 0.0f;
+	const float AMS5812_0015_D_P_MAX = 1.5f;
+	const float AMS5812_0003_D_B_P_MIN = -0.3f;
+	const float AMS5812_0003_D_B_P_MAX = 0.3f;
+	const float AMS5812_0008_D_B_P_MIN = -0.8f;
+	const float AMS5812_0008_D_B_P_MAX = 0.8f;
+	const float AMS5812_0015_D_B_P_MIN = -1.5f;
+	const float AMS5812_0015_D_B_P_MAX = 1.5f;
+	const float AMS5812_0030_D_P_MIN = 0.0f;
+	const float AMS5812_0030_D_P_MAX = 3.0f;
+	const float AMS5812_0050_D_P_MIN = 0.0f;
+	const float AMS5812_0050_D_P_MAX = 5.0f;
+	const float AMS5812_0150_D_P_MIN = 0.0f;
+	const float AMS5812_0150_D_P_MAX = 15.0f;
+	const float AMS5812_0300_D_P_MIN = 0.0f;
+	const float AMS5812_0300_D_P_MAX = 30.0f;
+	const float AMS5812_0600_D_P_MIN = 0.0f;
+	const float AMS5812_0600_D_P_MAX = 60.0f;
+	const float AMS5812_1000_D_P_MIN = 0.0f;
+	const float AMS5812_1000_D_P_MAX = 100.0f;
+	const float AMS5812_0030_D_B_P_MIN = -3.0f;
+	const float AMS5812_0030_D_B_P_MAX = 3.0f;
+	const float AMS5812_0050_D_B_P_MIN = -5.0f;
+	const float AMS5812_0050_D_B_P_MAX = 5.0f;
+	const float AMS5812_0150_D_B_P_MIN = -15.0f;
+	const float AMS5812_0150_D_B_P_MAX = 15.0f;
+	const float AMS5812_0150_B_P_MIN = 11.0f;
+	const float AMS5812_0150_B_P_MAX = 17.5f;
+	const float AMS5812_0150_A_P_MIN = 0.0f;
+	const float AMS5812_0150_A_P_MAX = 15.0f;
+	const float AMS5812_0300_A_P_MIN = 0.0f;
+	const float AMS5812_0300_A_P_MAX = 30.0f;
+
+	// temperature ranges, C
+	const float AMS5812_T_MIN = -25.0f;
+	const float AMS5812_T_MAX = 85.0f;
 };
 
 #endif
