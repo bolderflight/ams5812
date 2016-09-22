@@ -22,6 +22,9 @@ DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+// Teensy 3.1/3.2
+#if defined(__MK20DX256__)
+
 #include "Arduino.h"
 #include "AMS5812.h"
 #include <i2c_t3.h>  // I2C library
@@ -274,3 +277,5 @@ void AMS5812::getData(float* pressure, float* temperature){
   // convert counts to temperature, C
   *temperature = ((temperatureCounts - digOutTmin)/((digOutTmax - digOutTmin)/(_tMax - _tMin)) + _tMin);
 }
+
+#endif
