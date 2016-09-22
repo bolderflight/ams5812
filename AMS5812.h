@@ -2,7 +2,7 @@
 AMS5812.h
 Brian R Taylor
 brian.taylor@bolderflight.com
-2016-08-11
+2016-09-22
 
 Copyright (c) 2016 Bolder Flight Systems
 
@@ -81,18 +81,18 @@ class AMS5812{
   public:
     AMS5812(int address, int bus, String type);
     void begin();
-    double getPressure();
-    double getTemperature();
-    void getData(double* pressure, double* temperature);
+    float getPressure();
+    float getTemperature();
+    void getData(float* pressure, float* temperature);
   private:
     int _address;
     int _bus;
     String _type;
-    double _pMin;
-    double _pMax;
-    double _tMin;
-    double _tMax;
-    const double _psi2pa = 4.4482216152605/(0.0254*0.0254); // conversion PSI to PA
+    float _pMin;
+    float _pMax;
+    float _tMin;
+    float _tMax;
+    const float _psi2pa = 4.4482216152605f/(0.0254f*0.0254f); // conversion PSI to PA
     void getTransducer();
     uint16_t readPressureBytes();
     void readBytes(uint16_t* pressureCounts, uint16_t* temperatureCounts);

@@ -2,7 +2,7 @@
 AMS5812_example.ino
 Brian R Taylor
 brian.taylor@bolderflight.com
-2016-08-11
+2016-09-22
 
 Copyright (c) 2016 Bolder Flight Systems
 
@@ -41,7 +41,7 @@ void setup() {
 }
 
 void loop() {
-  double pressure, temperature;
+  float pressure, temperature;
 
   // getting both the temperature (C) and pressure (PA)
   dPress.getData(&pressure,&temperature);

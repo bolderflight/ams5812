@@ -2,7 +2,7 @@
 AMS5812.cpp
 Brian R Taylor
 brian.taylor@bolderflight.com
-2016-08-11
+2016-09-22
 
 Copyright (c) 2016 Bolder Flight Systems
 
@@ -224,10 +224,10 @@ void AMS5812::getTransducer(){
 }
 
 /* gets only the pressure value, PA */
-double AMS5812::getPressure(){
+float AMS5812::getPressure(){
   uint16_t digOutPmin = 3277;   // digital output at minimum pressure
   uint16_t digOutPmax = 29491;  // digital output at maximum pressure
-  double pressure;  // pressure, pa
+  float pressure;  // pressure, pa
   uint16_t pressureCounts; // pressure digital output, counts
 
   // get pressure off transducer
@@ -240,10 +240,10 @@ double AMS5812::getPressure(){
 }
 
 /* gets only the temperature value, C */
-double AMS5812::getTemperature(){
+float AMS5812::getTemperature(){
   uint16_t digOutTmin = 3277;   // digital output at minimum temperature
   uint16_t digOutTmax = 29491;  // digital output at maximum temperature
-  double temperature;  // temperature, C
+  float temperature;  // temperature, C
   uint16_t pressureCounts; // pressure digital output, counts
   uint16_t temperatureCounts; // temperature digital output, counts
 
@@ -257,7 +257,7 @@ double AMS5812::getTemperature(){
 }
 
 /* gets both the pressure (PA) and temperature (C) values */
-void AMS5812::getData(double* pressure, double* temperature){
+void AMS5812::getData(float* pressure, float* temperature){
   uint16_t digOutPmin = 3277;   // digital output at minimum pressure
   uint16_t digOutPmax = 29491;  // digital output at maximum pressure
   uint16_t digOutTmin = 3277;   // digital output at minimum temperature
