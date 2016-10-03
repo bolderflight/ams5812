@@ -1,13 +1,13 @@
 # AMS5812
-Library for communicating with [AMSYS AMS 5812](http://www.amsys.info/products/ams5812.htm) pressure transducers using Teensy 3.1/3.2 devices.
+Library for communicating with [AMSYS AMS 5812](http://www.amsys.info/products/ams5812.htm) pressure transducers using Teensy 3.1/3.2 and 3.5 devices.
 
 # Description
 The AMSYS AMS 5812 pressure transducers are fully signal conditioned, amplified, and temperature compensated over a temperature range of -25 to +85 C. These sensors generate data with high precision, high stability and low drift. Digital measurements are sampled with a 14 bit resolution. The AMSYS AMS 5812 sensors are available in a wide variety of pressure ranges and in configurations suited for barometric, differential, and bidirectional differential measurement.
 
-This library communicates with the AMS 5812 sensors using an I2C interface. The default I2C address for the AMS 5812 is 0x78; however, a USB starter kit may be purchased to enable programming additional slave addresses. Pressure and temperature data can be provided up to a rate of 1 kHz.
+This library communicates with the AMS 5812 sensors using an I2C interface. The default I2C address for the AMS 5812 is 0x78; however, a USB starter kit may be purchased to enable programming additional slave addresses. Pressure and temperature data can be provided up to a rate of 2 kHz.
 
 # Usage
-This library uses the [i2c_t3 enhanced I2C library](https://github.com/nox771/i2c_t3) for Teensy 3.1/3.2 devices.
+This library uses the [i2c_t3 enhanced I2C library](https://github.com/nox771/i2c_t3) for Teensy 3.x/LC devices.
 
 Simply clone or download and extract the zipped library into your Arduino/libraries folder.
 
@@ -52,6 +52,21 @@ dPress.getData(&pressure,&temperature);
 # Wiring and Pullups
 Please refer to the [AMSYS AMS 5812 datasheet](http://www.analogmicro.de/_pages/sens/ams5812/ams5812_data_sheet.pdf) and the [Teensy pinout diagrams](https://www.pjrc.com/teensy/pinout.html).
 
-The silver dot on the AMSYS AMS 5812 marks the location of Pin 1. Ground (AMS 5812, Pin 2) should be connected to Teensy ground (GND) and VCC (AMS 5812, Pin 7) should be connected to 5V. If your Teensy is supplied with 5V power, this can be from Teensy Vin. AMS 5812 SDA (AMS 5812, Pin 4) and SCL (AMS 5812, Pin 5) should be connected to SDA and SCL on the Teensy. For Teensy 3.1/3.2 using I2C bus 0, these are pins 18 and 19, respectively. For Teensy 3.1/3.2 using I2C bus 1, these are pins 30 and 29.
+The silver dot on the AMSYS AMS 5812 marks the location of Pin 1. The AMS 5812 pinout is:
 
-4.7 kOhm resistors should be used as pullups on SDA and SCL. For Teensy 3.1/3.2, these resistors should pullup with a 5V source.
+   * Pin 2: Ground
+   * Pin 4: SDA
+   * Pin 5: SCL
+   * Pin 7: VCC, this should be a 4.75V to 5.25V power source. If your Teensy is supplied with 5V power, this can be from Teensy Vin.
+
+The Teensy pinout is:
+
+   * Teensy 3.1/3.2:
+      * Bus 0 - Pin 18: SDA, Pin 19: SCL
+      * Bus 1 - Pin 29: SCL, Pin 30: SDA
+   * Teensy 3.5:
+      * Bus 0 - Pin 18: SDA, Pin 19: SCL
+      * Bus 1 - Pin 37: SCL, Pin 38: SDA
+      * Bus 2 - Pin 3: SCL, Pin 4: SDA
+
+4.7 kOhm resistors should be used as pullups on SDA and SCL, these resistors should pullup with a 5V source.

@@ -2,7 +2,7 @@
 AMS5812.h
 Brian R Taylor
 brian.taylor@bolderflight.com
-2016-09-22
+2016-10-03
 
 Copyright (c) 2016 Bolder Flight Systems
 
@@ -42,6 +42,9 @@ class AMS5812{
     float _pMax;
     float _tMin;
     float _tMax;
+
+    // i2c bus frequency
+    const uint32_t _i2cRate = 400000;
     
 	// conversion PSI to PA
     const float _psi2pa = 4.4482216152605f/(0.0254f*0.0254f); 

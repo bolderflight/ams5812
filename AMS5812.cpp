@@ -2,7 +2,7 @@
 AMS5812.cpp
 Brian R Taylor
 brian.taylor@bolderflight.com
-2016-09-22
+2016-10-03
 
 Copyright (c) 2016 Bolder Flight Systems
 
@@ -22,8 +22,8 @@ DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-// Teensy 3.1/3.2
-#if defined(__MK20DX256__)
+// Teensy 3.1/3.2 || Teensy 3.5
+#if defined(__MK20DX256__) || defined(__MK64FX512__)
 
 #include "Arduino.h"
 #include "AMS5812.h"
@@ -38,74 +38,74 @@ AMS5812::AMS5812(uint8_t address, uint8_t bus, String type){
 
 /* starts the I2C communication and sets the pressure and temperature ranges using getTransducer */
 void AMS5812::begin(){
+i2c_pins pins; 
 
-  // starting the I2C
-  if(_bus == 1) {
-  	Wire1.begin(I2C_MASTER, 0, I2C_PINS_29_30, I2C_PULLUP_EXT, I2C_RATE_400);
-  }
-  else{
-    Wire.begin(I2C_MASTER, 0, I2C_PINS_18_19, I2C_PULLUP_EXT, I2C_RATE_400);
-  }
+	/* setting the I2C pins and protecting against _bus out of range */
+	#if defined(__MK20DX256__) // Teensy 3.1/3.2
+		if(_bus == 1) {
+			pins = I2C_PINS_29_30;
+		}
+		else{
+			pins = I2C_PINS_18_19;
+			_bus = 0;
+		}
 
-  // setting the min and max pressure and temperature based on the chip
-  getTransducer();
+	#endif
+
+	#if defined(__MK64FX512__) // Teensy 3.5
+		if(_bus == 2) {
+			pins = I2C_PINS_3_4;
+		}
+		else if(_bus == 1) {
+			pins = I2C_PINS_37_38;
+		}
+		else{
+			pins = I2C_PINS_18_19;
+			_bus = 0;
+		}
+
+	#endif
+
+  	// starting the I2C
+	i2c_t3(_bus).begin(I2C_MASTER, 0, pins, I2C_PULLUP_EXT, _i2cRate);
+
+  	// setting the min and max pressure and temperature based on the chip
+  	getTransducer();
 }
 
 /* reads pressure and temperature and returns values in counts */
 void AMS5812::readBytes(uint16_t* pressureCounts, uint16_t* temperatureCounts){
-  uint8_t b[4]; // buffer
-  const uint8_t numBytes = 4;
+	uint8_t b[4]; // buffer
+	const uint8_t numBytes = 4;
 
-  if(_bus == 1){
-  	// 4 bytes from address
-    Wire1.requestFrom(_address, numBytes); 
-  
-    // put the data in buffer
-    b[0] = Wire1.read(); 
-    b[1] = Wire1.read();
-    b[2] = Wire1.read();
-    b[3] = Wire1.read();
-  }
-  else{
     // 4 bytes from address
-    Wire.requestFrom(_address, numBytes); 
+    i2c_t3(_bus).requestFrom(_address, numBytes); 
   
     // put the data in buffer
-    b[0] = Wire.read(); 
-    b[1] = Wire.read();
-    b[2] = Wire.read();
-    b[3] = Wire.read();
-  }
+    b[0] = i2c_t3(_bus).readByte(); 
+    b[1] = i2c_t3(_bus).readByte();
+    b[2] = i2c_t3(_bus).readByte();
+    b[3] = i2c_t3(_bus).readByte();
 
-  // assemble into a uint16_t
-  *pressureCounts = (((uint16_t) (b[0]&0x7F)) <<8) + (((uint16_t) b[1]));
-  *temperatureCounts = (((uint16_t) (b[2]&0x7F)) <<8) + (((uint16_t) b[3]));
+	// assemble into a uint16_t
+	*pressureCounts = (((uint16_t) (b[0]&0x7F)) <<8) + (((uint16_t) b[1]));
+	*temperatureCounts = (((uint16_t) (b[2]&0x7F)) <<8) + (((uint16_t) b[3]));
 }
 
 /* reads pressure and returns values in counts */
 uint16_t AMS5812::readPressureBytes(){
-  uint8_t b[2]; // buffer
-  const uint8_t numBytes = 4;
+	uint8_t b[2]; // buffer
+	const uint8_t numBytes = 4;
 
-  if(_bus == 1){
     // 2 bytes from address
-    Wire1.requestFrom(_address, numBytes); 
+    i2c_t3(_bus).requestFrom(_address, numBytes); 
   
     // put the data in buffer
-    b[0] = Wire1.read(); 
-    b[1] = Wire1.read();
-  }
-  else{
-    // 2 bytes from address
-    Wire.requestFrom(_address, numBytes); 
-  
-    // put the data in buffer
-    b[0] = Wire.read(); 
-    b[1] = Wire.read();
-  }
+    b[0] = i2c_t3(_bus).readByte(); 
+    b[1] = i2c_t3(_bus).readByte();
 
-  // assemble into a uint16_t
-  return (((uint16_t) (b[0]&0x7F)) <<8) + (((uint16_t) b[1]));
+	// assemble into a uint16_t
+	return (((uint16_t) (b[0]&0x7F)) <<8) + (((uint16_t) b[1]));
 }
 
 /* sets the pressure and temperature range based on the chip */
