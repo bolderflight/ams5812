@@ -50,7 +50,7 @@ dPress.getData(&pressure,&temperature);
 ```
 
 # Wiring and Pullups
-Please refer to the [AMSYS AMS 5812 datasheet](http://www.analogmicro.de/_pages/sens/ams5812/ams5812_data_sheet.pdf) and the [Teensy pinout diagrams](https://www.pjrc.com/teensy/pinout.html).
+Please refer to the [AMSYS AMS 5812 datasheet](https://github.com/bolderflight/AMS5812/blob/master/docs/ams5812.pdf) and the [Teensy pinout diagrams](https://www.pjrc.com/teensy/pinout.html).
 
 The silver dot on the AMSYS AMS 5812 marks the location of Pin 1. The AMS 5812 pinout is:
 
