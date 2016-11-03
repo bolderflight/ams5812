@@ -29,7 +29,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 // address of 0x06, on the Teensy
 // 3.1/3.2 I2C bus 0 (pins 18 and 19)
 // and is a AMS5812-0008-D
-AMS5812 dPress(0x06,0,"AMS5812-0008-D");
+AMS5812 dPress(0x06,0,AMS5812_0008_D);
 
 void setup() {
   // serial to display data

@@ -2,7 +2,7 @@
 AMS5812.h
 Brian R Taylor
 brian.taylor@bolderflight.com
-2016-10-03
+2016-10-22
 
 Copyright (c) 2016 Bolder Flight Systems
 
@@ -27,9 +27,35 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
 #include "Arduino.h"
 
+enum ams5812_transducer
+{
+    AMS5812_0000_D,
+    AMS5812_0001_D,  
+    AMS5812_0000_D_B,
+    AMS5812_0001_D_B,
+    AMS5812_0003_D,
+    AMS5812_0008_D,
+    AMS5812_0015_D,
+    AMS5812_0003_D_B,
+    AMS5812_0008_D_B,
+    AMS5812_0015_D_B,
+    AMS5812_0030_D,
+    AMS5812_0050_D,
+    AMS5812_0150_D,
+    AMS5812_0300_D,
+    AMS5812_0600_D,
+    AMS5812_1000_D,
+    AMS5812_0030_D_B,
+    AMS5812_0050_D_B,
+    AMS5812_0150_D_B,
+    AMS5812_0150_B,
+    AMS5812_0150_A,
+    AMS5812_0300_A
+};
+
 class AMS5812{
   public:
-    AMS5812(uint8_t address, uint8_t bus, String type);
+    AMS5812(uint8_t address, uint8_t bus, ams5812_transducer type);
     void begin();
     float getPressure();
     float getTemperature();
@@ -37,7 +63,7 @@ class AMS5812{
   private:
     uint8_t _address;
     uint8_t _bus;
-    String _type;
+    ams5812_transducer _type;
     float _pMin;
     float _pMax;
     float _tMin;
