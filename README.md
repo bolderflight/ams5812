@@ -1,8 +1,8 @@
 # AMS5812
-Library for communicating with [AMSYS AMS 5812](http://www.amsys.info/products/ams5812.htm) pressure transducers using Teensy 3.1/3.2 and 3.5 devices.
+Library for communicating with [Analog Microelectronics AMS 5812](http://www.analog-micro.com/en/products/sensors/pressuresensors/ams5812/) pressure transducers using Teensy 3.1/3.2 and 3.5 devices.
 
 # Description
-The AMSYS AMS 5812 pressure transducers are fully signal conditioned, amplified, and temperature compensated over a temperature range of -25 to +85 C. These sensors generate data with high precision, high stability and low drift. Digital measurements are sampled with a 14 bit resolution. The AMSYS AMS 5812 sensors are available in a wide variety of pressure ranges and in configurations suited for barometric, differential, and bidirectional differential measurement.
+The Analog Microelectronics AMS 5812 pressure transducers are fully signal conditioned, amplified, and temperature compensated over a temperature range of -25 to +85 C. These sensors generate data with high precision, high stability and low drift. Digital measurements are sampled with a 14 bit resolution. The AMS 5812 sensors are available in a wide variety of pressure ranges and in configurations suited for barometric, differential, and bidirectional differential measurement.
 
 This library communicates with the AMS 5812 sensors using an I2C interface. The default I2C address for the AMS 5812 is 0x78; however, a USB starter kit may be purchased to enable programming additional slave addresses. Pressure and temperature data can be provided up to a rate of 2 kHz.
 
@@ -77,9 +77,9 @@ dPress.getData(&pressure,&temperature);
 ```
 
 # Wiring and Pullups
-Please refer to the [AMSYS AMS 5812 datasheet](https://github.com/bolderflight/AMS5812/blob/master/docs/ams5812.pdf) and the [Teensy pinout diagrams](https://www.pjrc.com/teensy/pinout.html).
+Please refer to the [Analog Microelectronics AMS 5812 datasheet](https://github.com/bolderflight/AMS5812/blob/master/docs/ams5812.pdf) and the [Teensy pinout diagrams](https://www.pjrc.com/teensy/pinout.html).
 
-The silver dot on the AMSYS AMS 5812 marks the location of Pin 1. The AMS 5812 pinout is:
+The silver dot on the AMS 5812 marks the location of Pin 1. The AMS 5812 pinout is:
 
    * Pin 2: Ground
    * Pin 4: SDA
