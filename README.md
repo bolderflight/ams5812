@@ -68,7 +68,7 @@ float temperature;
 temperature = dPress.getTemperature();
 ```
 
-**void getData(float* pressure, float* temperature)**
+**void getData(float&ast; pressure, float&ast; temperature)**
 *getData(float&ast; pressure, float&ast; temperature)* samples the AMS 5812 sensor and returns the pressure measurement as a float with units of Pascal (Pa) and temperature measurement as a float with units of Celsius (C).
 
 ```C++
