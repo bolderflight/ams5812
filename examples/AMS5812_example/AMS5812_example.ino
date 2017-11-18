@@ -2,9 +2,8 @@
 AMS5812_example.ino
 Brian R Taylor
 brian.taylor@bolderflight.com
-2016-09-22
 
-Copyright (c) 2016 Bolder Flight Systems
+Copyright (c) 2017 Bolder Flight Systems
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software 
 and associated documentation files (the "Software"), to deal in the Software without restriction, 
@@ -26,44 +25,31 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
 // an AMS5812 object, which is a
 // differential pressure sensure at I2C
-// address of 0x06, on the Teensy
-// 3.1/3.2 I2C bus 0 (pins 18 and 19)
+// address of 0x06, on I2C bus 0,
 // and is a AMS5812-0008-D
-AMS5812 dPress(0x06,0,AMS5812_0008_D);
+AMS5812 dPress(Wire,0x06,AMS5812::AMS5812_0008_D);
 
 void setup() {
   // serial to display data
   Serial.begin(9600);
+  while(!Serial){}
 
   // starting communication with the 
   // static pressure transducer
-  dPress.begin();
+  if (dPress.begin() < 0) {
+    Serial.println("Error communicating with sensor, check wiring and I2C address");
+    while(1){}
+  }
 }
 
 void loop() {
-  float pressure, temperature;
-
-  // getting both the temperature (C) and pressure (PA)
-  dPress.getData(&pressure,&temperature);
+  // read the sensor
+  dPress.readSensor();
 
   // displaying the data
-  Serial.print(pressure,6);
+  Serial.print(dPress.getPressure_Pa(),6);
   Serial.print("\t");
-  Serial.println(temperature,6);
-  delay(100);
-
-  // getting just the pressure, PA
-  pressure = dPress.getPressure();
+  Serial.println(dPress.getTemperature_C(),6);
   delay(10);
-
-  // getting just the temperature, C
-  temperature = dPress.getTemperature();
-  delay(10);
-
-  // displaying the data
-  Serial.print(pressure,6);
-  Serial.print("\t");
-  Serial.println(temperature,6);
-  delay(100);
 }
 
