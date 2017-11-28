@@ -48,34 +48,31 @@ AMS5812 dPress(Wire,0x06,AMS5812::AMS5812_0008_D);
 
 ### Setup Functions
 **int begin()**
-This should be called in your setup function. It initializes and tests the I2C communication and sets the minimum and maximum pressure and temperature values based on the AMS 5812 sensor. The return value is 1 if successful in initializing communication with the pressure transducer and -1 if it is not successful.
+This should be called in your setup function. It initializes and tests the I2C communication and sets the minimum and maximum pressure and temperature values based on the AMS 5812 sensor. The return value is positive if successful in initializing communication with the pressure transducer and negative if it is not successful.
 
 ```C++
 dPress.begin();
 ```
 
 ### Data Collection Functions
-**int readSensor()**
-*readSensor()* reads the sensor and stores the newest data in a buffer, it should be called every time you would like to retrieve the most current data from the sensor. This function returns 1 if it's succesful in retrieving the data and -1 if not succesful.
+**int readSensor()** reads the sensor and stores the newest data in a buffer, it should be called every time you would like to retrieve the most current data from the sensor. This function returns a positive value if it's succesful in retrieving the data and negative if not succesful.
 
 ```C++
 dPress.readSensor();
 ```
 
-**float getPressure_Pa()**
-*getPressure_Pa()* gets the pressure value from the data buffer and returns it in units of Pascal.
+**float getPressure_Pa()** gets the pressure value from the data buffer and returns it in units of Pascal.
 
 ```C++
 float pressure;
 pressure = dPress.getPressure_Pa();
 ```
 
-**float getTemperature_C()**
-*getTemperature_C()* gets the temperature value from the data buffer and returns it in units of degrees Celsius.
+**float getTemperature_C()** gets the temperature value from the data buffer and returns it in units of degrees Celsius.
 
 ```C++
 float temperature;
-pressure = dPress.getTemperature_C();
+temperature = dPress.getTemperature_C();
 ```
 
 ## Example List
