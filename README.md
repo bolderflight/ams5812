@@ -1,5 +1,5 @@
 # AMS5812
-Library for communicating with [Analog Microelectronics AMS 5812](http://www.analog-micro.com/en/products/sensors/pressuresensors/ams5812/) pressure transducers.
+Arduino library for communicating with [Analog Microelectronics AMS 5812](http://www.analog-micro.com/en/products/sensors/pressuresensors/ams5812/) pressure transducers.
 
 # Description
 The Analog Microelectronics AMS 5812 pressure transducers are fully signal conditioned, amplified, and temperature compensated over a temperature range of -25 to +85 C. These sensors generate data with high precision, high stability and low drift. Digital measurements are sampled with a 14 bit resolution. The AMS 5812 sensors are available in a wide variety of pressure ranges and in configurations suited for barometric, differential, and bidirectional differential measurement.
