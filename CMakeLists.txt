@@ -4,8 +4,8 @@ if (DEFINED MCU)
 	set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/cmake/cortex.cmake")
 endif()
 # Project information
-project(AMS5812
-	VERSION 1.0
+project(Ams5812
+	VERSION 1.0.0
 	DESCRIPTION "AMS5812 sensor driver"
 	LANGUAGES C CXX
 )
@@ -13,20 +13,19 @@ if (DEFINED MCU)
 	# Grab the processor and set up definitions and compile options
 	include(${CMAKE_SOURCE_DIR}/cmake/config_mcu.cmake)
 	configMcu(${MCU})
-	# Fetch types
 	include(FetchContent)
-	FetchContent_Declare(
-		types
-		GIT_REPOSITORY 	git@gitlab.com:bolderflight/software/types.git
-		GIT_TAG					v1.0.0
-	)
-	FetchContent_MakeAvailable(types)
 	# Fetch core
 	FetchContent_Declare(
 		core
 		GIT_REPOSITORY 	git@gitlab.com:bolderflight/software/core.git
 	)
 	FetchContent_MakeAvailable(core)
+	# Fetch global-defs
+	FetchContent_Declare(
+		global_defs
+		GIT_REPOSITORY 	git@gitlab.com:bolderflight/software/global_defs.git
+	)
+	FetchContent_MakeAvailable(global_defs)
 	# Add the library target
 	add_library(ams5812
 		src/ams5812/ams5812.cc
@@ -36,7 +35,7 @@ if (DEFINED MCU)
 	target_link_libraries(ams5812
 		PUBLIC
 			core
-			types
+			global_defs
 	)
 	# Setup include directories 
 	target_include_directories(ams5812 PUBLIC 
@@ -44,6 +43,7 @@ if (DEFINED MCU)
 		$<INSTALL_INTERFACE:include>
 	)
 endif()
+
 # Example and test if this project is built separately
 if (PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
 	if (DEFINED MCU)

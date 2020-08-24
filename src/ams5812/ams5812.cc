@@ -6,6 +6,8 @@
 */
 
 #include "ams5812/ams5812.h"
+#include "core/core.h"
+#include "global_defs/global_defs.h"
 
 namespace sensors {
 
@@ -148,14 +150,15 @@ bool Ams5812::Read() {
   uint16_t temperature_counts = static_cast<uint16_t>(buffer[2] & 0x7F) << 8 | buffer[3];
   float pressure_psi = static_cast<float>(pressure_counts - DIG_OUT_PMIN_) / static_cast<float>(DIG_OUT_PMAX_ - DIG_OUT_PMIN_) * (max_press_psi_ - min_press_psi_) + min_press_psi_;
   float temperature_c = static_cast<float>(temperature_counts - DIG_OUT_TMIN_) / static_cast<float>(DIG_OUT_TMAX_ - DIG_OUT_TMIN_) * (MAX_T_C_ - MIN_T_C_) + MIN_T_C_;
-  p_.psi(pressure_psi);
-  t_.c(temperature_c);
+  if (temperature_c > MAX_T_C_) {return false;}
+  p_ = global::conversions::Psi_to_Pa(pressure_psi);
+  t_ = temperature_c;
   return true;
 }
-Pressure Ams5812::pressure() {
+float Ams5812::pressure_pa() {
   return p_;
 }
-Temperature Ams5812::die_temperature() {
+float Ams5812::die_temperature_c() {
   return t_;
 }
 

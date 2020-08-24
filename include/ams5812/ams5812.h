@@ -8,7 +8,6 @@
 #ifndef INCLUDE_AMS5812_AMS5812_H_
 #define INCLUDE_AMS5812_AMS5812_H_
 
-#include "types/types.h"
 #include "core/core.h"
 
 namespace sensors {
@@ -41,9 +40,9 @@ class Ams5812 {
   Ams5812(i2c_t3 *bus, uint8_t addr, Transducer type);
   bool Begin();
   bool Read();
-  Pressure pressure();
-  Temperature die_temperature();
-  
+  float pressure_pa();
+  float die_temperature_c();
+
  private:
   /* Communication interface */
   i2c_t3 *bus_;
@@ -63,8 +62,8 @@ class Ams5812 {
   static constexpr float MIN_T_C_ = -25.0f;
   static constexpr float MAX_T_C_ = 85.0f;
   /* Data */
-  Pressure p_;
-  Temperature t_;
+  float p_;
+  float t_;
 };
 
 }  // namespace sensors
