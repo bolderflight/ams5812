@@ -11,7 +11,11 @@
 
 namespace sensors {
 
-Ams5812::Ams5812(i2c_t3 *bus, uint8_t addr, Transducer type) {
+#if defined(__IMXRT1062__)
+  Ams5812::Ams5812(TwoWire *bus, uint8_t addr, Transducer type) {
+#else
+  Ams5812::Ams5812(i2c_t3 *bus, uint8_t addr, Transducer type) {
+#endif
   bus_ = bus;
   addr_ = addr;
   switch (type) {
@@ -141,11 +145,21 @@ bool Ams5812::Begin() {
 }
 bool Ams5812::Read() {
   uint8_t buffer[4];
-  unsigned int bytes_rx = bus_->requestFrom(addr_, sizeof(buffer), I2C_STOP, I2C_TIMEOUT_US_);
+  #if defined(__IMXRT1062__)
+    unsigned int bytes_rx = bus_->requestFrom(addr_, sizeof(buffer));
+  #else
+    unsigned int bytes_rx = bus_->requestFrom(addr_, sizeof(buffer), I2C_STOP, I2C_TIMEOUT_US_);
+  #endif
   if (bytes_rx != sizeof(buffer)) {
     return false;
-  }
-  bus_->read(buffer, sizeof(buffer));
+  }  
+  #if defined(__IMXRT1062__)
+    for (std::size_t i = 0; i < sizeof(buffer); i++) {
+      buffer[i] = bus_->read();
+    }
+  #else
+    bus_->read(buffer, sizeof(buffer));
+  #endif
   uint16_t pressure_counts =  static_cast<uint16_t>(buffer[0] & 0x7F) << 8 | buffer[1];
   uint16_t temperature_counts = static_cast<uint16_t>(buffer[2] & 0x7F) << 8 | buffer[3];
   float pressure_psi = static_cast<float>(pressure_counts - DIG_OUT_PMIN_) / static_cast<float>(DIG_OUT_PMAX_ - DIG_OUT_PMIN_) * (max_press_psi_ - min_press_psi_) + min_press_psi_;
