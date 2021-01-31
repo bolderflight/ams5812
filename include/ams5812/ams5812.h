@@ -37,7 +37,11 @@ class Ams5812 {
     AMS5812_0150_B,
     AMS5812_0150_A,
     AMS5812_0300_A};
-  Ams5812(i2c_t3 *bus, uint8_t addr, Transducer type);
+  #if defined(__IMXRT1062__)
+    Ams5812(TwoWire *bus, uint8_t addr, Transducer type);
+  #else
+    Ams5812(i2c_t3 *bus, uint8_t addr, Transducer type);
+  #endif
   bool Begin();
   bool Read();
   float pressure_pa();
@@ -45,7 +49,11 @@ class Ams5812 {
 
  private:
   /* Communication interface */
-  i2c_t3 *bus_;
+  #if defined(__IMXRT1062__)
+    TwoWire *bus_;
+  #else
+    i2c_t3 *bus_;
+  #endif
   uint8_t addr_;
   static constexpr uint32_t I2C_CLOCK_ = 400000;
   static constexpr unsigned int MAX_TRIES_ = 10;
