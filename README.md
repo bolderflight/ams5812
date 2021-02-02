@@ -33,6 +33,8 @@ Notice that the *cmake* command includes a define specifying the microcontroller
    * MK64FX512
    * MK66FX1M0
    * MKL26Z64
+   * IMXRT1062_T40
+   * IMXRT1062_T41
 
 These are known to work with the same packages used in Teensy products. Also switching the MK66FX1M0 or MK64FX512 from BGA to LQFP packages is known to work well. Swapping packages of other chips is probably fine, as long as it's only a package change.
 
@@ -41,9 +43,8 @@ The *ams5812_example* targets creates an executable for communicating with the s
 ## Namespace
 This library is within the namespace *sensors*.
 
-## Methods
-
-**Ams5812(i2c_t3 &ast;bus, uint8_t addr, Transducer type)** Creates an Ams5812 object. A pointer to the I2C bus object is passed along with the I2C address of the sensor and the AMS-5812 transducer type. The enumerated transducer types are:
+## AMS-5812 enum
+An enum is used to specify the transducer type of the AMS-5812 sensor. The enum class is entitled *Ams5812Type* and the enumerated transducer types are:
 
 | Sensor Name       | Enumerated Type  | Pressure Type              | Pressure Range       |
 | -----------       | ---------------  | ---------------            | ---------------      |
@@ -70,15 +71,21 @@ This library is within the namespace *sensors*.
 | AMS 5812-0150-A   | AMS5812_0150_A   | absolute                   | 0...103421 Pa        |
 | AMS 5812-0300-A   | AMS5812_0300_A   | absolute                   | 0...206843 Pa        |
 
-For example, the following code declares an AMS5812 object called *ams* with an AMS5812-0008-D sensor located on I2C bus 0 with an I2C address of 0x10:
+## Methods
+Templates are used to specify the I2C bus, I2C address, and transducer type. Validity of the I2C address and transducer type are checked during compilation.
+
+**Ams5812()** Creates an Ams5812 object and configures the sensor driver for the specified transducer. For example, the following code declares an AMS5812 object called *ams* with an AMS5812-0008-D sensor located on I2C bus 0 with an I2C address of 0x06:
 
 ```C++
-sensors::Ams5812 ams(&Wire, 0x10, sensors::Ams5812::AMS5812_0008_D);
+sensors::Ams5812<&Wire, 0x06, sensors::Ams5812Type::AMS5812_0008_D> ams;
 ```
+**constexpr int i2c_clock()** Returns the recommended I2C clock speed for communicating with the AMS-5812. This method is available as a compile time constant.
 
-**bool Begin()** Initializes communication with the sensor and configures the sensor driver for the specified transducer. True is returned if communication is able to be established with the sensor and configuration completes successfully, otherwise, false is returned.
+**bool Begin()** Checks whether communication can be established with the transducer. True is returned if communication is able to be established, otherwise, false is returned. Note that the I2C bus must be initialized prior to using this method.
 
 ```C++
+Wire.begin();
+Wire.setClock(ams.i2c_clock());
 bool status = ams.Begin();
 if (!status) {
   // ERROR
