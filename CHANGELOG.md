@@ -1,12 +1,5 @@
 # Changelog
 
-## v2.0.0
-- Updated to a templated interface so static_assert can be used on the transducer type and I2C address to assure validity during compile time
-- Updated example, CI/CD pipeline, and README to illustrate the updated interface
-
-## v1.0.4
-- Updated to support core v2.0.3 which switches Teensy 3.x I2C to TwoWire instead of i2c_t3
-
 ## v1.0.3
 - Updated to support Teensy 4.x
 
