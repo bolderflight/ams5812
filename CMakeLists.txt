@@ -5,7 +5,7 @@ if (DEFINED MCU)
 endif()
 # Project information
 project(Ams5812
-	VERSION 2.0.0
+	VERSION 1.0.3
 	DESCRIPTION "AMS5812 sensor driver"
 	LANGUAGES C CXX
 )
@@ -18,7 +18,7 @@ if (DEFINED MCU)
 	FetchContent_Declare(
 		core
 		GIT_REPOSITORY 	https://gitlab.com/bolderflight/software/core.git
-		GIT_TAG v2.0.3
+		GIT_TAG v2.0.2
 	)
 	FetchContent_MakeAvailable(core)
 	# Fetch global-defs
@@ -29,15 +29,21 @@ if (DEFINED MCU)
 	)
 	FetchContent_MakeAvailable(global_defs)
 	# Add the library target
-	add_library(ams5812 INTERFACE)
+	add_library(ams5812
+		src/ams5812/ams5812.cc
+		include/ams5812/ams5812.h
+	)
 	# Link libraries
 	target_link_libraries(ams5812
-		INTERFACE
+		PUBLIC
 			core
 			global_defs
 	)
 	# Setup include directories 
-	target_include_directories(ams5812 INTERFACE include/)
+	target_include_directories(ams5812 PUBLIC 
+		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+		$<INSTALL_INTERFACE:include>
+	)
 endif()
 
 # Example and test if this project is built separately
