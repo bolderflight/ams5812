@@ -5,7 +5,7 @@ if (DEFINED MCU)
 endif()
 # Project information
 project(Ams5812
-	VERSION 1.0.3
+	VERSION 1.0.4
 	DESCRIPTION "AMS5812 sensor driver"
 	LANGUAGES C CXX
 )
@@ -18,7 +18,7 @@ if (DEFINED MCU)
 	FetchContent_Declare(
 		core
 		GIT_REPOSITORY 	https://gitlab.com/bolderflight/software/core.git
-		GIT_TAG v2.0.2
+		GIT_TAG v2.0.3
 	)
 	FetchContent_MakeAvailable(core)
 	# Fetch global-defs
