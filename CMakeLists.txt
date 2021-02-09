@@ -5,7 +5,7 @@ if (DEFINED MCU)
 endif()
 # Project information
 project(Ams5812
-	VERSION 1.0.4
+	VERSION 1.0.5
 	DESCRIPTION "AMS5812 sensor driver"
 	LANGUAGES C CXX
 )
@@ -17,17 +17,17 @@ if (DEFINED MCU)
 	# Fetch core
 	FetchContent_Declare(
 		core
-		GIT_REPOSITORY 	https://gitlab.com/bolderflight/software/core.git
-		GIT_TAG v2.0.3
+		GIT_REPOSITORY 	https://github.com/bolderflight/core.git
+		GIT_TAG v2.0.4
 	)
 	FetchContent_MakeAvailable(core)
 	# Fetch global-defs
 	FetchContent_Declare(
-		global_defs
-		GIT_REPOSITORY 	https://gitlab.com/bolderflight/software/global_defs.git
-		GIT_TAG v1.1.2
+		units
+		GIT_REPOSITORY 	https://github.com/bolderflight/units.git
+		GIT_TAG v2.0.0
 	)
-	FetchContent_MakeAvailable(global_defs)
+	FetchContent_MakeAvailable(units)
 	# Add the library target
 	add_library(ams5812
 		src/ams5812/ams5812.cc
@@ -37,7 +37,7 @@ if (DEFINED MCU)
 	target_link_libraries(ams5812
 		PUBLIC
 			core
-			global_defs
+			units
 	)
 	# Setup include directories 
 	target_include_directories(ams5812 PUBLIC 
