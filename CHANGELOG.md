@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.0.5
+- Updated to work with core v2.0.4 and units 2.0.0
+- Updated to pull sources from GitHub instead of GitLab
+
 ## v1.0.4
 - Updated to use TwoWire instead of i2c_t3 to support core v2.0.3 and to provide a common interface for Teensy 3.x and 4.x chips
 
