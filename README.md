@@ -93,4 +93,4 @@ The silver dot on the AMS 5812 marks the location of Pin 1. The AMS 5812 pinout 
    * Pin 5: SCL
    * Pin 7: VCC, this should be a 4.75V to 5.25V power source.
 
-2.2 kOhm resistors should be used as pullups on SDA and SCL, these resistors should pullup with a 5V source.
+4.7 kOhm resistors should be used as pullups on SDA and SCL, these resistors should pullup with a 5V source.

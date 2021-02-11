@@ -173,7 +173,7 @@ bool Ams5812::Read() {
   float temp_c = static_cast<float>(temp_cnts - DIG_OUT_TMIN_) /
                  DIG_OUT_TRANGE_ * T_RANGE_C_ + MIN_T_C_;
   if (temp_c > MAX_T_C_) {return false;}
-  pres_pa_ = conversions::Psi_to_Pa(pres_psi);
+  pres_pa_ = pres_psi * PSI2PA_;
   temp_c_ = temp_c;
   return true;
 }

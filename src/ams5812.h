@@ -83,6 +83,8 @@ class Ams5812 {
   static constexpr float MAX_T_C_ = 85.0f;
   static constexpr float T_RANGE_C_ = MAX_T_C_ - MIN_T_C_;
   /* Data */
+  static constexpr float PSI2PA_ = (0.45359237f * 9.80665f) /
+                                   (0.0254f * 0.0254f);
   float pres_pa_, temp_c_;
 };
 
