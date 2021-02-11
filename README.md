@@ -1,22 +1,24 @@
-# AMS5812
-Arduino library for communicating with [Analog Microelectronics AMS 5812](http://www.analog-micro.com/en/products/sensors/pressuresensors/ams5812/) pressure transducers.
-
-# License
-This library is licensed under the GPLV3. Please contact us at [support@bolderflight.com](mailto:support@bolderflight.com) to obtain other licenses.
+# ams5812-arduino
+This library communicates with [AMS-5812](https://www.analog-micro.com/en/products/pressure-sensors/board-mount-pressure-sensors/ams5812/) pressure transducers and is built for use with the Arduino IDE.
+   * [License](LICENSE.md)
+   * [Changelog](CHANGELOG.md)
 
 # Description
-The Analog Microelectronics AMS 5812 pressure transducers are fully signal conditioned, amplified, and temperature compensated over a temperature range of -25 to +85 C. These sensors generate data with high precision, high stability and low drift. Digital measurements are sampled with a 14 bit resolution. The AMS 5812 sensors are available in a wide variety of pressure ranges and in configurations suited for barometric, differential, and bidirectional differential measurement.
+The Analog Microelectronics AMS-5812 pressure transducers are fully signal conditioned, amplified, and temperature compensated over a temperature range of -25 to +85 C. These sensors generate data with high precision, high stability and low drift. Digital measurements are sampled with a 14 bit resolution. The AMS 5812 sensors are available in a wide variety of pressure ranges and in configurations suited for barometric, differential, and bidirectional differential measurement.
 
 # Usage
-This library communicates with the AMS 5812 sensors using an I2C interface. The default I2C address for the AMS 5812 is 0x78; however, a USB starter kit may be purchased to enable programming additional slave addresses. Pressure and temperature data can be provided up to a rate of 2 kHz.
+This library communicates with the AMS-5812 sensors using an I2C interface. The default I2C address for the AMS-5812 is 0x78; however, a USB starter kit may be purchased to enable programming additional slave addresses. Pressure and temperature data can be provided at rates of up to 2 kHz.
 
 ## Installation
-Simply clone or download and extract the zipped library into your Arduino/libraries folder.
+Simply clone or download and extract the zipped library into your Arduino/libraries folder. The library is added as:
 
-## Function Description
-### Object Declaration
-**AMS5812(TwoWire &bus,uint8_t address,AMS5915::Transducer type)**
-An AMS5812 object should be constructed, specifying the I2C bus, AMS 5812 I2C address, and the AMS 5812 transducer type. The enumerated transducer types are:
+```C++
+#include "ams5812.h"
+```
+
+## Methods
+
+**Ams5812(i2c_t3 &ast;bus, uint8_t addr, Transducer type)** Creates an Ams5812 object. A pointer to the I2C bus object is passed along with the I2C address of the sensor and the AMS-5812 transducer type. The enumerated transducer types are:
 
 | Sensor Name       | Enumerated Type  | Pressure Type              | Pressure Range       |
 | -----------       | ---------------  | ---------------            | ---------------      |
@@ -43,46 +45,46 @@ An AMS5812 object should be constructed, specifying the I2C bus, AMS 5812 I2C ad
 | AMS 5812-0150-A   | AMS5812_0150_A   | absolute                   | 0...103421 Pa        |
 | AMS 5812-0300-A   | AMS5812_0300_A   | absolute                   | 0...206843 Pa        |
 
-For example, the following code declares an AMS5812 object called *dPress* with an AMS5812-0008-D sensor located on I2C bus 0 and an I2C address of 0x06:
+For example, the following code declares an AMS5812 object called *ams* with an AMS5812-0008-D sensor located on I2C bus 0 with an I2C address of 0x10:
 
 ```C++
-AMS5812 dPress(Wire,0x06,AMS5812::AMS5812_0008_D);
+Ams5812 ams(&Wire, 0x10, sensors::Ams5812::AMS5812_0008_D);
 ```
 
-### Setup Functions
-**int begin()**
-This should be called in your setup function. It initializes and tests the I2C communication and sets the minimum and maximum pressure and temperature values based on the AMS 5812 sensor. The return value is positive if successful in initializing communication with the pressure transducer and negative if it is not successful.
+**bool Begin()** Initializes communication with the sensor and configures the sensor driver for the specified transducer. True is returned if communication is able to be established with the sensor and configuration completes successfully, otherwise, false is returned.
 
 ```C++
-dPress.begin();
+bool status = ams.Begin();
+if (!status) {
+  // ERROR
+}
 ```
 
-### Data Collection Functions
-**int readSensor()** reads the sensor and stores the newest data in a buffer, it should be called every time you would like to retrieve the most current data from the sensor. This function returns a positive value if it's succesful in retrieving the data and negative if not succesful.
+**bool Read()** Reads data from the AMS-5812 and stores the data in the Ams5812 object. Returns true if data is successfully read, otherwise, returns false.
 
 ```C++
-dPress.readSensor();
+/* Read the sensor data */
+if (ams.Read()) {
+}
 ```
 
-**float getPressure_Pa()** gets the pressure value from the data buffer and returns it in units of Pascal.
+**float pressure_pa()** Returns the pressure data from the Ams5812 object in units of Pa.
 
 ```C++
-float pressure;
-pressure = dPress.getPressure_Pa();
+float pressure = ams.pressure_pa();
 ```
 
-**float getTemperature_C()** gets the temperature value from the data buffer and returns it in units of degrees Celsius.
+**float die_temperature_c** Returns the die temperature of the sensor from the Ams5812 object in units of degrees C.
 
 ```C++
-float temperature;
-temperature = dPress.getTemperature_C();
+float temperature = ams.die_temperature_c();
 ```
 
 ## Example List
-* **AMS5812_example**: demonstrates declaring an object, initializing the sensor, and collecting data. In this example the sensor is an AMS5812-0008-D with a sensor address of 0x06 located on I2C bus 0. 
+* **ams5812_example**: demonstrates declaring an object, initializing the sensor, and collecting data. In this example the sensor is an AMS5812-0008-D with a sensor address of 0x06 located on I2C bus 0. 
 
 # Wiring and Pullups
-Please refer to the [Analog Microelectronics AMS 5812 datasheet](https://github.com/bolderflight/AMS5812/blob/master/docs/ams5812.pdf) and your microcontroller's pinout diagram.
+Please refer to the [Analog Microelectronics AMS 5812 datasheet](https://github.com/bolderflight/ams5812-arduino/blob/main/docs/ams5812.pdf) and your microcontroller's pinout diagram.
 
 The silver dot on the AMS 5812 marks the location of Pin 1. The AMS 5812 pinout is:
 
