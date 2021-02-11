@@ -21,35 +21,35 @@ DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "AMS5812.h"
+#include "ams5812.h"
 
-// an AMS5812 object, which is a
-// differential pressure sensure at I2C
-// address of 0x06, on I2C bus 0,
-// and is a AMS5812-0008-D
-AMS5812 dPress(Wire,0x06,AMS5812::AMS5812_0008_D);
+/*
+* An AMS5812 object, which is a
+* differential pressure sensure at I2C
+* address of 0x06, on I2C bus 0,
+* and is a AMS5812-0008-D
+*/
+Ams5812 diff_pres(&Wire, 0x06, Ams5812::AMS5812_0008_D);
 
 void setup() {
-  // serial to display data
+  /* Serial to display data */
   Serial.begin(9600);
   while(!Serial){}
-
-  // starting communication with the 
-  // static pressure transducer
-  if (dPress.begin() < 0) {
-    Serial.println("Error communicating with sensor, check wiring and I2C address");
+  /* Starting communication with the static pressure transducer */
+  if (!diff_pres.Begin()) {
+    Serial.println("Error communicating with sensor");
     while(1){}
   }
 }
 
 void loop() {
-  // read the sensor
-  dPress.readSensor();
-
-  // displaying the data
-  Serial.print(dPress.getPressure_Pa(),6);
-  Serial.print("\t");
-  Serial.println(dPress.getTemperature_C(),6);
+  /* Read the sensor */
+  if (diff_pres.Read()) {
+    /* Display the data */
+    Serial.print(diff_pres.pressure_pa(), 6);
+    Serial.print("\t");
+    Serial.println(diff_pres.die_temperature_c(), 6);
+  }
   delay(10);
 }
 

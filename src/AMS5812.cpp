@@ -1,186 +1,179 @@
 /*
-  AMS5812.cpp
-  Brian R Taylor
-  brian.taylor@bolderflight.com
-
-  Copyright (c) 2017 Bolder Flight Systems
-
-  This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 3 of the License, or
-  (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+* Brian R Taylor
+* brian.taylor@bolderflight.com
+* 
+* Copyright (c) 2021 Bolder Flight Systems Inc
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the “Software”), to
+* deal in the Software without restriction, including without limitation the
+* rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+* sell copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in
+* all copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+* FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+* IN THE SOFTWARE.
 */
 
 #include "Arduino.h"
-#include "AMS5812.h"
+#include "Wire.h"
+#include "ams5812.h"
 
-/* constructor, I2C bus, sensor address, and transducer type */
-AMS5812::AMS5812(TwoWire &bus,uint8_t address,Transducer type){
-  // I2C bus
-  _bus = &bus; 
-  // I2C address
-  _address = address; 
-  // transducer type
-  _type = type; 
+Ams5812::Ams5812(TwoWire *bus, uint8_t addr, Transducer type) {
+  bus_ = bus;
+  addr_ = addr;
+  switch (type) {
+    case AMS5812_0000_D: {
+      min_pres_psi_ = 0.0f;
+      max_pres_psi_ = 0.075f;
+      break;
+    }
+    case AMS5812_0001_D: {
+      min_pres_psi_ = 0.0f;
+      max_pres_psi_ = 0.15f;
+      break;
+    }
+    case AMS5812_0000_D_B: {
+      min_pres_psi_ = -0.075f;
+      max_pres_psi_ = 0.075f;
+      break;
+    }
+    case AMS5812_0001_D_B: {
+      min_pres_psi_ = -0.15f;
+      max_pres_psi_ = 0.15f;
+      break;
+    }
+    case AMS5812_0003_D: {
+      min_pres_psi_ = 0.0f;
+      max_pres_psi_ = 0.3f;
+      break;
+    }
+    case AMS5812_0008_D: {
+      min_pres_psi_ = 0.0f;
+      max_pres_psi_ = 0.8f;
+      break;
+    }
+    case AMS5812_0015_D: {
+      min_pres_psi_ = 0.0f;
+      max_pres_psi_ = 1.5f;
+      break;
+    }
+    case AMS5812_0003_D_B: {
+      min_pres_psi_ = -0.3f;
+      max_pres_psi_ = 0.3f;
+      break;
+    }
+    case AMS5812_0008_D_B: {
+      min_pres_psi_ = -0.8f;
+      max_pres_psi_ = 0.8f;
+      break;
+    }
+    case AMS5812_0015_D_B: {
+      min_pres_psi_ = -1.5f;
+      max_pres_psi_ = 1.5f;
+      break;
+    }
+    case AMS5812_0030_D: {
+      min_pres_psi_ = 0.0f;
+      max_pres_psi_ = 3.0f;
+      break;
+    }
+    case AMS5812_0050_D: {
+      min_pres_psi_ = 0.0f;
+      max_pres_psi_ = 5.0f;
+      break;
+    }
+    case AMS5812_0150_D: {
+      min_pres_psi_ = 0.0f;
+      max_pres_psi_ = 15.0f;
+      break;
+    }
+    case AMS5812_0300_D: {
+      min_pres_psi_ = 0.0f;
+      max_pres_psi_ = 30.0f;
+      break;
+    }
+    case AMS5812_0600_D: {
+      min_pres_psi_ = 0.0f;
+      max_pres_psi_ = 60.0f;
+      break;
+    }
+    case AMS5812_1000_D: {
+      min_pres_psi_ = 0.0f;
+      max_pres_psi_ = 100.0f;
+      break;
+    }
+    case AMS5812_0030_D_B: {
+      min_pres_psi_ = -3.0f;
+      max_pres_psi_ = 3.0f;
+      break;
+    }
+    case AMS5812_0050_D_B: {
+      min_pres_psi_ = -5.0f;
+      max_pres_psi_ = 5.0f;
+      break;
+    }
+    case AMS5812_0150_D_B: {
+      min_pres_psi_ = -15.0f;
+      max_pres_psi_ = 15.0f;
+      break;
+    }
+    case AMS5812_0150_B: {
+      min_pres_psi_ = 11.0f;
+      max_pres_psi_ = 17.5f;
+      break;
+    }
+    case AMS5812_0150_A: {
+      min_pres_psi_ = 0.0f;
+      max_pres_psi_ = 15.0f;
+      break;
+    }
+    case AMS5812_0300_A: {
+      min_pres_psi_ = 0.0f;
+      max_pres_psi_ = 30.0f;
+      break;
+    }
+  }
+  pres_range_psi_ = max_pres_psi_ - min_pres_psi_;
 }
-
-/* starts the I2C communication and sets the pressure and temperature ranges using getTransducer */
-int AMS5812::begin(){
-  // starting the I2C bus
-  _bus->begin();
-  // setting the I2C clock
-  _bus->setClock(_i2cRate);
-  // setting the min and max pressure based on the chip
-  getTransducer();
-  // checking to see if we can talk with the sensor
-  for (size_t i=0; i < _maxAttempts; i++) {
-    _status = readBytes(&_pressureCounts,&_temperatureCounts);
-    if (_status > 0) {break;}
+bool Ams5812::Begin() {
+  bus_->begin();
+  bus_->setClock(I2C_CLOCK_);
+  /* Checking to see if we can communicate with sensor */
+  for (std::size_t tries = 0; tries < MAX_TRIES_; tries++) {
+    if (Read()) {
+      return true;
+    }
     delay(10);
   }
-  return _status;
+  return false;
 }
-
-/* reads data from the sensor */
-int AMS5812::readSensor(){
-  // get pressure and temperature off transducer
-  _status = readBytes(&_pressureCounts, &_temperatureCounts);
-  // convert counts to pressure, PA
-  _data.Pressure_Pa = ((_pressureCounts - _digOutPmin)/((_digOutPmax - _digOutPmin)/(_pMax - _pMin)) + _pMin) * _psi2pa;
-  // convert counts to temperature, C
-  _data.Temp_C = ((_temperatureCounts - _digOutTmin)/((_digOutTmax - _digOutTmin)/(_tMax - _tMin)) + _tMin);
-  return _status;
-}
-
-/* returns the pressure value, PA */
-float AMS5812::getPressure_Pa(){
-  return _data.Pressure_Pa;
-}
-
-/* returns the temperature value, C */
-float AMS5812::getTemperature_C(){
-  return _data.Temp_C;
-}
-
-/* sets the pressure and temperature range based on the chip */
-void AMS5812::getTransducer(){
-  // setting the min and max pressures based on which transducer it is
-  switch(_type) {
-    case AMS5812_0000_D:
-      _pMin = AMS5812_0000_D_P_MIN;
-      _pMax = AMS5812_0000_D_P_MAX;
-      break;
-    case AMS5812_0001_D:  
-      _pMin = AMS5812_0001_D_P_MIN;
-      _pMax = AMS5812_0001_D_P_MAX;
-      break;
-    case AMS5812_0000_D_B:
-      _pMin = AMS5812_0000_D_B_P_MIN;
-      _pMax = AMS5812_0000_D_B_P_MAX;
-      break;
-    case AMS5812_0001_D_B:
-      _pMin = AMS5812_0001_D_B_P_MIN;
-      _pMax = AMS5812_0001_D_B_P_MAX;
-      break;
-    case AMS5812_0003_D:
-      _pMin = AMS5812_0003_D_P_MIN;
-      _pMax = AMS5812_0003_D_P_MAX;
-      break;
-    case AMS5812_0008_D:
-      _pMin = AMS5812_0008_D_P_MIN;
-      _pMax = AMS5812_0008_D_P_MAX;
-      break;
-    case AMS5812_0015_D:
-      _pMin = AMS5812_0015_D_P_MIN;
-      _pMax = AMS5812_0015_D_P_MAX;
-      break;
-    case AMS5812_0003_D_B:
-      _pMin = AMS5812_0003_D_B_P_MIN;
-      _pMax = AMS5812_0003_D_B_P_MAX;
-      break;
-    case AMS5812_0008_D_B:
-      _pMin = AMS5812_0008_D_B_P_MIN;
-      _pMax = AMS5812_0008_D_B_P_MAX;
-      break;
-    case AMS5812_0015_D_B:
-      _pMin = AMS5812_0015_D_B_P_MIN;
-      _pMax = AMS5812_0015_D_B_P_MAX;
-      break;
-    case AMS5812_0030_D:
-      _pMin = AMS5812_0030_D_P_MIN;
-      _pMax = AMS5812_0030_D_P_MAX;
-      break;
-    case AMS5812_0050_D:
-      _pMin = AMS5812_0050_D_P_MIN;
-      _pMax = AMS5812_0050_D_P_MAX;
-      break;
-    case AMS5812_0150_D:
-      _pMin = AMS5812_0150_D_P_MIN;
-      _pMax = AMS5812_0150_D_P_MAX;
-      break;
-    case AMS5812_0300_D:
-      _pMin = AMS5812_0300_D_P_MIN;
-      _pMax = AMS5812_0300_D_P_MAX;
-      break;
-    case AMS5812_0600_D:
-      _pMin = AMS5812_0600_D_P_MIN;
-      _pMax = AMS5812_0600_D_P_MAX;
-      break;
-    case AMS5812_1000_D:
-      _pMin = AMS5812_1000_D_P_MIN;
-      _pMax = AMS5812_1000_D_P_MAX;
-      break;
-    case AMS5812_0030_D_B:
-      _pMin = AMS5812_0030_D_B_P_MIN;
-      _pMax = AMS5812_0030_D_B_P_MAX;
-      break;
-    case AMS5812_0050_D_B:
-      _pMin = AMS5812_0050_D_B_P_MIN;
-      _pMax = AMS5812_0050_D_B_P_MAX;
-      break;
-    case AMS5812_0150_D_B:
-      _pMin = AMS5812_0150_D_B_P_MIN;
-      _pMax = AMS5812_0150_D_B_P_MAX;
-      break;
-    case AMS5812_0150_B:
-      _pMin = AMS5812_0150_B_P_MIN;
-      _pMax = AMS5812_0150_B_P_MAX;
-      break;
-    case AMS5812_0150_A:
-      _pMin = AMS5812_0150_A_P_MIN;
-      _pMax = AMS5812_0150_A_P_MAX;
-      break;
-    case AMS5812_0300_A:
-      _pMin = AMS5812_0300_A_P_MIN;
-      _pMax = AMS5812_0300_A_P_MAX;
-      break;
+bool Ams5812::Read() {
+  uint8_t buf[4];
+  std::size_t bytes_req = sizeof(buf);
+  std::size_t bytes_rx = bus_->requestFrom(addr_, bytes_req);
+  if (bytes_rx != bytes_req) {
+    return false;
   }
-}
-
-/* reads pressure and temperature and returns values in counts */
-int AMS5812::readBytes(uint16_t* pressureCounts, uint16_t* temperatureCounts){
-  // read from sensor
-  _numBytes = _bus->requestFrom(_address,sizeof(_buffer));
-  // put the data in buffer
-  if (_numBytes == sizeof(_buffer)) {
-    _buffer[0] = _bus->read(); 
-    _buffer[1] = _bus->read();
-    _buffer[2] = _bus->read();
-    _buffer[3] = _bus->read();
-    // assemble into a uint16_t
-    *pressureCounts = (((uint16_t) (_buffer[0]&0x7F)) <<8) + (((uint16_t) _buffer[1]));
-    *temperatureCounts = (((uint16_t) (_buffer[2]&0x7F)) <<8) + (((uint16_t) _buffer[3]));
-    _status = 1;
-  } else {
-    _status = -1;
+  for (std::size_t i = 0; i < bytes_rx; i++) {
+    buf[i] = bus_->read();
   }
-  return _status;
+  uint16_t pres_cnts = static_cast<uint16_t>(buf[0] & 0x7F) << 8 | buf[1];
+  uint16_t temp_cnts = static_cast<uint16_t>(buf[2] & 0x7F) << 8 | buf[3];
+  float pres_psi = static_cast<float>(pres_cnts - DIG_OUT_PMIN_) /
+                   DIG_OUT_PRANGE_ * pres_range_psi_ + min_pres_psi_;
+  float temp_c = static_cast<float>(temp_cnts - DIG_OUT_TMIN_) /
+                 DIG_OUT_TRANGE_ * T_RANGE_C_ + MIN_T_C_;
+  if (temp_c > MAX_T_C_) {return false;}
+  pres_pa_ = conversions::Psi_to_Pa(pres_psi);
+  temp_c_ = temp_c;
+  return true;
 }

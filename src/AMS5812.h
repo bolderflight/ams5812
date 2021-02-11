@@ -1,152 +1,89 @@
 /*
-  AMS5812.h
-  Brian R Taylor
-  brian.taylor@bolderflight.com
-
-  Copyright (c) 2017 Bolder Flight Systems
-
-  This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 3 of the License, or
-  (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+* Brian R Taylor
+* brian.taylor@bolderflight.com
+* 
+* Copyright (c) 2021 Bolder Flight Systems Inc
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the “Software”), to
+* deal in the Software without restriction, including without limitation the
+* rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+* sell copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in
+* all copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+* FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+* IN THE SOFTWARE.
 */
 
-#ifndef AMS5812_h
-#define AMS5812_h
+#ifndef INCLUDE_AMS5812_AMS5812_H_
+#define INCLUDE_AMS5812_AMS5812_H_
 
-#include "Wire.h"
 #include "Arduino.h"
+#include "Wire.h"
 
-class AMS5812{
-  public:
-    enum Transducer
-    {
-        AMS5812_0000_D,
-        AMS5812_0001_D,  
-        AMS5812_0000_D_B,
-        AMS5812_0001_D_B,
-        AMS5812_0003_D,
-        AMS5812_0008_D,
-        AMS5812_0015_D,
-        AMS5812_0003_D_B,
-        AMS5812_0008_D_B,
-        AMS5812_0015_D_B,
-        AMS5812_0030_D,
-        AMS5812_0050_D,
-        AMS5812_0150_D,
-        AMS5812_0300_D,
-        AMS5812_0600_D,
-        AMS5812_1000_D,
-        AMS5812_0030_D_B,
-        AMS5812_0050_D_B,
-        AMS5812_0150_D_B,
-        AMS5812_0150_B,
-        AMS5812_0150_A,
-        AMS5812_0300_A
-    };
-    AMS5812(TwoWire &bus,uint8_t address,Transducer type);
-    int begin();
-    int readSensor();
-    float getPressure_Pa();
-    float getTemperature_C();
-  private:
-    // struct to hold sensor data
-    struct Data {
-      float Pressure_Pa;
-      float Temp_C;
-    };
-    Data _data;
-    // I2C bus
-    TwoWire *_bus;
-    // sensor address
-    uint8_t _address;
-    // transducer type
-    Transducer _type;
-    // buffer for I2C data
-    uint8_t _buffer[4];
-    // number of bytes received from I2C
-    size_t _numBytes;
-    // maximum number of attempts to talk to sensor
-    const size_t _maxAttempts = 10;
-    // track success of reading from sensor
-    int _status;
-    // pressure digital output, counts
-    uint16_t _pressureCounts;      
-    // temperature digital output, counts
-    uint16_t _temperatureCounts;   
-    // min and max pressure, millibar
-    float _pMin;
-    float _pMax;
-    // i2c bus frequency
-    const uint32_t _i2cRate = 400000;
-    // conversion PSI to PA
-    const float _psi2pa = 4.4482216152605f/(0.0254f*0.0254f); 
-    // digital output at minimum pressure
-    const int _digOutPmin = 3277;   
-    // digital output at maximum pressure
-    const int _digOutPmax = 29491;  
-    // digital output at minimum temperature
-    const int _digOutTmin = 3277;   
-    // digital output at maximum temperature
-    const int _digOutTmax = 29491; 
-    // temperature ranges, C
-    const float _tMin = -25.0f;
-    const float _tMax = 85.0f;
-    // min and max pressures, PSI
-  	const float AMS5812_0000_D_P_MIN = 0.0f;
-  	const float AMS5812_0000_D_P_MAX = 0.075f;
-  	const float AMS5812_0001_D_P_MIN = 0.0f;
-  	const float AMS5812_0001_D_P_MAX = 0.15f;
-  	const float AMS5812_0000_D_B_P_MIN = -0.075f;
-  	const float AMS5812_0000_D_B_P_MAX = 0.075f;
-  	const float AMS5812_0001_D_B_P_MIN = -0.15f;
-  	const float AMS5812_0001_D_B_P_MAX = 0.15f;
-  	const float AMS5812_0003_D_P_MIN = 0.0f;
-  	const float AMS5812_0003_D_P_MAX = 0.3f;
-  	const float AMS5812_0008_D_P_MIN = 0.0f;
-  	const float AMS5812_0008_D_P_MAX = 0.8f;
-  	const float AMS5812_0015_D_P_MIN = 0.0f;
-  	const float AMS5812_0015_D_P_MAX = 1.5f;
-  	const float AMS5812_0003_D_B_P_MIN = -0.3f;
-  	const float AMS5812_0003_D_B_P_MAX = 0.3f;
-  	const float AMS5812_0008_D_B_P_MIN = -0.8f;
-  	const float AMS5812_0008_D_B_P_MAX = 0.8f;
-  	const float AMS5812_0015_D_B_P_MIN = -1.5f;
-  	const float AMS5812_0015_D_B_P_MAX = 1.5f;
-  	const float AMS5812_0030_D_P_MIN = 0.0f;
-  	const float AMS5812_0030_D_P_MAX = 3.0f;
-  	const float AMS5812_0050_D_P_MIN = 0.0f;
-  	const float AMS5812_0050_D_P_MAX = 5.0f;
-  	const float AMS5812_0150_D_P_MIN = 0.0f;
-  	const float AMS5812_0150_D_P_MAX = 15.0f;
-  	const float AMS5812_0300_D_P_MIN = 0.0f;
-  	const float AMS5812_0300_D_P_MAX = 30.0f;
-  	const float AMS5812_0600_D_P_MIN = 0.0f;
-  	const float AMS5812_0600_D_P_MAX = 60.0f;
-  	const float AMS5812_1000_D_P_MIN = 0.0f;
-  	const float AMS5812_1000_D_P_MAX = 100.0f;
-  	const float AMS5812_0030_D_B_P_MIN = -3.0f;
-  	const float AMS5812_0030_D_B_P_MAX = 3.0f;
-  	const float AMS5812_0050_D_B_P_MIN = -5.0f;
-  	const float AMS5812_0050_D_B_P_MAX = 5.0f;
-  	const float AMS5812_0150_D_B_P_MIN = -15.0f;
-  	const float AMS5812_0150_D_B_P_MAX = 15.0f;
-  	const float AMS5812_0150_B_P_MIN = 11.0f;
-  	const float AMS5812_0150_B_P_MAX = 17.5f;
-  	const float AMS5812_0150_A_P_MIN = 0.0f;
-  	const float AMS5812_0150_A_P_MAX = 15.0f;
-  	const float AMS5812_0300_A_P_MIN = 0.0f;
-  	const float AMS5812_0300_A_P_MAX = 30.0f;
-	  void getTransducer();
-    int readBytes(uint16_t* pressureCounts, uint16_t* temperatureCounts);
+class Ams5812 {
+ public:
+  enum Transducer {
+    AMS5812_0000_D,
+    AMS5812_0001_D,
+    AMS5812_0000_D_B,
+    AMS5812_0001_D_B,
+    AMS5812_0003_D,
+    AMS5812_0008_D,
+    AMS5812_0015_D,
+    AMS5812_0003_D_B,
+    AMS5812_0008_D_B,
+    AMS5812_0015_D_B,
+    AMS5812_0030_D,
+    AMS5812_0050_D,
+    AMS5812_0150_D,
+    AMS5812_0300_D,
+    AMS5812_0600_D,
+    AMS5812_1000_D,
+    AMS5812_0030_D_B,
+    AMS5812_0050_D_B,
+    AMS5812_0150_D_B,
+    AMS5812_0150_B,
+    AMS5812_0150_A,
+    AMS5812_0300_A};
+  Ams5812(TwoWire *bus, uint8_t addr, Transducer type);
+  bool Begin();
+  bool Read();
+  inline float pressure_pa() const {return pres_pa_;}
+  inline float die_temperature_c() const {return temp_c_;}
+
+ private:
+  /* Communication interface */
+  TwoWire *bus_;
+  uint8_t addr_;
+  static constexpr uint32_t I2C_CLOCK_ = 400000;
+  static constexpr std::size_t MAX_TRIES_ = 10;
+  /* Min and max pressure, millibar */
+  float min_pres_psi_, max_pres_psi_, pres_range_psi_;
+  /* Digital output at min and max pressure */
+  static constexpr uint16_t DIG_OUT_PMIN_ = 3277;
+  static constexpr uint16_t DIG_OUT_PMAX_ = 29491;
+  static constexpr float DIG_OUT_PRANGE_ =
+    static_cast<float>(DIG_OUT_PMAX_ - DIG_OUT_PMIN_);
+  /* Digital output at min and max temperature */
+  static constexpr uint16_t DIG_OUT_TMIN_ = 3277;
+  static constexpr uint16_t DIG_OUT_TMAX_ = 29491;
+  static constexpr float DIG_OUT_TRANGE_ =
+    static_cast<float>(DIG_OUT_TMAX_ - DIG_OUT_TMIN_);
+  /* Minimum and maximum temperature */
+  static constexpr float MIN_T_C_ = -25.0f;
+  static constexpr float MAX_T_C_ = 85.0f;
+  static constexpr float T_RANGE_C_ = MAX_T_C_ - MIN_T_C_;
+  /* Data */
+  float pres_pa_, temp_c_;
 };
 
-#endif
+#endif  // INCLUDE_AMS5812_AMS5812_H_
