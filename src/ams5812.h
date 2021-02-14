@@ -65,7 +65,7 @@ class Ams5812 {
   TwoWire *bus_;
   uint8_t addr_;
   static constexpr uint32_t I2C_CLOCK_ = 400000;
-  static constexpr std::size_t MAX_TRIES_ = 10;
+  static constexpr int MAX_TRIES_ = 10;
   /* Min and max pressure, millibar */
   float min_pres_psi_, max_pres_psi_, pres_range_psi_;
   /* Digital output at min and max pressure */

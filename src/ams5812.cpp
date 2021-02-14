@@ -148,7 +148,7 @@ bool Ams5812::Begin() {
   bus_->begin();
   bus_->setClock(I2C_CLOCK_);
   /* Checking to see if we can communicate with sensor */
-  for (std::size_t tries = 0; tries < MAX_TRIES_; tries++) {
+  for (int tries = 0; tries < MAX_TRIES_; tries++) {
     if (Read()) {
       return true;
     }
@@ -158,12 +158,12 @@ bool Ams5812::Begin() {
 }
 bool Ams5812::Read() {
   uint8_t buf[4];
-  std::size_t bytes_req = sizeof(buf);
-  std::size_t bytes_rx = bus_->requestFrom(addr_, bytes_req);
+  int bytes_req = sizeof(buf);
+  int bytes_rx = bus_->requestFrom(addr_, bytes_req);
   if (bytes_rx != bytes_req) {
     return false;
   }
-  for (std::size_t i = 0; i < bytes_rx; i++) {
+  for (int i = 0; i < bytes_rx; i++) {
     buf[i] = bus_->read();
   }
   uint16_t pres_cnts = static_cast<uint16_t>(buf[0] & 0x7F) << 8 | buf[1];

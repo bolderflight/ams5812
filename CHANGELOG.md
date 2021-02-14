@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.0.1
+- Updated std::size_t to int to support microcontrollers without STL
+
 ## v2.0.0
 - Updated to match our [AMS-5812 library](https://github.com/bolderflight/ams5812) for flight software
 - Updated license to MIT
