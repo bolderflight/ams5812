@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.0.0
+- Updated namespace to *bfs*
+- Updated to work with units v3.1.0
+
 ## v1.0.5
 - Updated to work with core v2.0.4 and units 2.0.0
 - Updated to pull sources from GitHub instead of GitLab

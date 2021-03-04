@@ -38,7 +38,7 @@ These are known to work with the same packages used in Teensy products. Also swi
 The *ams5812_example* targets creates an executable for communicating with the sensor using I2C communication. The example target also has a *_hex* for creating the hex file to upload to the microcontroller. 
 
 ## Namespace
-This library is within the namespace *sensors*.
+This library is within the namespace *bfs*.
 
 ## Methods
 
@@ -72,7 +72,7 @@ This library is within the namespace *sensors*.
 For example, the following code declares an AMS5812 object called *ams* with an AMS5812-0008-D sensor located on I2C bus 0 with an I2C address of 0x10:
 
 ```C++
-sensors::Ams5812 ams(&Wire, 0x10, sensors::Ams5812::AMS5812_0008_D);
+bfs::Ams5812 ams(&Wire, 0x10, bfs::Ams5812::AMS5812_0008_D);
 ```
 
 **bool Begin()** Initializes communication with the sensor and configures the sensor driver for the specified transducer. True is returned if communication is able to be established with the sensor and configuration completes successfully, otherwise, false is returned.

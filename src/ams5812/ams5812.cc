@@ -27,7 +27,7 @@
 #include "core/core.h"
 #include "units/units.h"
 
-namespace sensors {
+namespace bfs {
 
 Ams5812::Ams5812(TwoWire *bus, uint8_t addr, Transducer type) {
   bus_ = bus;
@@ -175,9 +175,9 @@ bool Ams5812::Read() {
   float temp_c = static_cast<float>(temp_cnts - DIG_OUT_TMIN_) /
                  DIG_OUT_TRANGE_ * T_RANGE_C_ + MIN_T_C_;
   if (temp_c > MAX_T_C_) {return false;}
-  pres_pa_ = conversions::Psi_to_Pa(pres_psi);
+  pres_pa_ = convpres(pres_psi, PresUnit::PSI, PresUnit::PA);
   temp_c_ = temp_c;
   return true;
 }
 
-}  // namespace sensors
+}  // namespace bfs

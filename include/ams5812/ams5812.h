@@ -28,7 +28,7 @@
 
 #include "core/core.h"
 
-namespace sensors {
+namespace bfs {
 
 class Ams5812 {
  public:
@@ -87,7 +87,7 @@ class Ams5812 {
   float pres_pa_, temp_c_;
 };
 
-}  // namespace sensors
+}  // namespace bfs
 
 
 #endif  // INCLUDE_AMS5812_AMS5812_H_
