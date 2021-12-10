@@ -28,12 +28,14 @@
 * address of 0x06, on I2C bus 0,
 * and is a AMS5812-0008-D
 */
-Ams5812 diff_pres(&Wire, 0x06, Ams5812::AMS5812_0008_D);
+bfs::Ams5812 diff_pres(&Wire, 0x06, bfs::Ams5812::AMS5812_0008_D);
 
 void setup() {
   /* Serial to display data */
   Serial.begin(9600);
   while(!Serial){}
+  Wire.begin();
+  Wire.setClock(400000);
   /* Starting communication with the static pressure transducer */
   if (!diff_pres.Begin()) {
     Serial.println("Error communicating with sensor");
@@ -45,9 +47,9 @@ void loop() {
   /* Read the sensor */
   if (diff_pres.Read()) {
     /* Display the data */
-    Serial.print(diff_pres.pressure_pa(), 6);
+    Serial.print(diff_pres.pres_pa(), 6);
     Serial.print("\t");
-    Serial.println(diff_pres.die_temperature_c(), 6);
+    Serial.println(diff_pres.die_temp_c(), 6);
   }
   delay(10);
 }

@@ -23,28 +23,35 @@
 * IN THE SOFTWARE.
 */
 
-#include "ams5812/ams5812.h"
+#include "ams5812.h"
 
-bfs::Ams5812 ams(&Wire, 0x06, bfs::Ams5812::AMS5812_0008_D);
+/*
+* An AMS5812 object, which is a
+* differential pressure sensure at I2C
+* address of 0x06, on I2C bus 0,
+* and is a AMS5812-0008-D
+*/
+bfs::Ams5812 diff_pres(&Wire, 0x06, bfs::Ams5812::AMS5812_0008_D);
 
 int main() {
-  Serial.begin(115200);
-  while(!Serial) {}
-  bool status = ams.Begin();
-  unsigned int t1, t2;
+  /* Serial to display data */
+  Serial.begin(9600);
+  while(!Serial){}
+  Wire.begin();
+  Wire.setClock(400000);
+  /* Starting communication with the static pressure transducer */
+  if (!diff_pres.Begin()) {
+    Serial.println("Error communicating with sensor");
+    while(1){}
+  }
   while (1) {
-    t1 = micros();
-    status = ams.Read();
-    t2 = micros();
-    float p = ams.pressure_pa();
-    float t = ams.die_temperature_c();
-    Serial.print(p);
-    Serial.print("\t");
-    Serial.print(t);
-    Serial.print("\t");
-    Serial.print(status);
-    Serial.print("\t");
-    Serial.println(t2 - t1);
-    delay(500);
+    /* Read the sensor */
+    if (diff_pres.Read()) {
+      /* Display the data */
+      Serial.print(diff_pres.pres_pa(), 6);
+      Serial.print("\t");
+      Serial.println(diff_pres.die_temp_c(), 6);
+    }
+    delay(10);
   }
 }

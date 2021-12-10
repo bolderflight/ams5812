@@ -1,5 +1,8 @@
 # Changelog
 
+## v3.0.0
+- Merging Ams5812 and Ams5812-arduino, this is the first open tag between the two.
+
 ## v2.0.1
 - Updated std::size_t to int to support microcontrollers without STL
 

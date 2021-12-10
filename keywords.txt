@@ -1,5 +1,5 @@
 Ams5812	KEYWORD1
 Begin	KEYWORD2
 Read	KEYWORD2
-pressure_pa	KEYWORD2
-die_temperature_c	KEYWORD2
+pres_pa	KEYWORD2
+die_temp_c	KEYWORD2

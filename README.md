@@ -1,22 +1,61 @@
-# ams5812-arduino
-This library communicates with [AMS-5812](https://www.analog-micro.com/en/products/pressure-sensors/board-mount-pressure-sensors/ams5812/) pressure transducers and is built for use with the Arduino IDE.
+[![Pipeline](https://gitlab.com/bolderflight/software/ams5812/badges/main/pipeline.svg)](https://gitlab.com/bolderflight/software/ams5812/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+![Bolder Flight Systems Logo](img/logo-words_75.png) &nbsp; &nbsp; ![Arduino Logo](img/arduino_logo_75.png)
+
+# Ams5812
+This library communicates with [AMS-5812](https://www.analog-micro.com/en/products/pressure-sensors/board-mount-pressure-sensors/ams5812/) pressure transducers and is compatible with Arduino and CMake build systems.
    * [License](LICENSE.md)
    * [Changelog](CHANGELOG.md)
+   * [Contributing guide](CONTRIBUTING.md)
 
 # Description
-The Analog Microelectronics AMS-5812 pressure transducers are fully signal conditioned, amplified, and temperature compensated over a temperature range of -25 to +85 C. These sensors generate data with high precision, high stability and low drift. Digital measurements are sampled with a 14 bit resolution. The AMS 5812 sensors are available in a wide variety of pressure ranges and in configurations suited for barometric, differential, and bidirectional differential measurement.
+The Analog Microelectronics AMS-5812 pressure transducers are fully signal conditioned, amplified, and temperature compensated over a temperature range of -25 to +85 C. These sensors generate data with high precision, high stability and low drift. Digital measurements are sampled with a 14 bit resolution. The AMS-5812 sensors are available in a wide variety of pressure ranges and in configurations suited for barometric, differential, and bidirectional differential measurement.
 
 # Usage
-This library communicates with the AMS-5812 sensors using an I2C interface. The default I2C address for the AMS-5812 is 0x78; however, a USB starter kit may be purchased to enable programming additional slave addresses. Pressure and temperature data can be provided at rates of up to 2 kHz.
+This library communicates with the AMS-5812 sensors using an I2C interface. The default I2C address for the AMS-5812 is 0x78; however, a USB starter kit may be purchased to enable programming additional addresses. Pressure and temperature data can be provided at rates of up to 2 kHz.
 
-## Installation
+# Installation
+
+## Arduino
 Simply clone or download and extract the zipped library into your Arduino/libraries folder. The library is added as:
 
 ```C++
 #include "ams5812.h"
 ```
 
-## Methods
+An example Arduino executable is located in: *examples/arduino/*. Teensy 3.x, 4.x, and LC devices are used for testing under Arduino and this library should be compatible with other Arduino devices.
+
+## CMake
+CMake is used to build this library, which is exported as a library target called *ams5812*. The header is added as:
+
+```C++
+#include "ams5812.h"
+```
+
+The library can be also be compiled stand-alone using the CMake idiom of creating a *build* directory and then, from within that directory issuing:
+
+```
+cmake .. -DMCU=MK66FX1M0
+make
+```
+
+This will build the library and an example executable called *ams5812_example*. The example executable source file is located at *examples/cmake/ams5812_example.cc*. Notice that the *cmake* command includes a define specifying the microcontroller the code is being compiled for. This is required to correctly configure the code, CPU frequency, and compile/linker options. The available MCUs are:
+   * MK20DX128
+   * MK20DX256
+   * MK64FX512
+   * MK66FX1M0
+   * MKL26Z64
+   * IMXRT1062_T40
+   * IMXRT1062_T41
+
+These are known to work with the same packages used in Teensy products. Also switching packages is known to work well, as long as it's only a package change.
+
+Each target also has a *_hex*, for creating the hex file to upload to the microcontroller, and an *_upload* for using the [Teensy CLI Uploader](https://www.pjrc.com/teensy/loader_cli.html) to flash the Teensy. Please note that the CMake build tooling is expected to be run under Linux or WSL, instructions for setting up your build environment can be found in our [build-tools repo](https://github.com/bolderflight/build-tools).
+
+# Namespace
+This library is within the namespace *bfs*.
+
+# Ams5812
 
 **Ams5812(i2c_t3 &ast;bus, uint8_t addr, Transducer type)** Creates an Ams5812 object. A pointer to the I2C bus object is passed along with the I2C address of the sensor and the AMS-5812 transducer type. The enumerated transducer types are:
 
@@ -48,12 +87,14 @@ Simply clone or download and extract the zipped library into your Arduino/librar
 For example, the following code declares an AMS5812 object called *ams* with an AMS5812-0008-D sensor located on I2C bus 0 with an I2C address of 0x10:
 
 ```C++
-Ams5812 ams(&Wire, 0x10, sensors::Ams5812::AMS5812_0008_D);
+bfs::Ams5812 ams(&Wire, 0x10, bfs::Ams5812::AMS5812_0008_D);
 ```
 
-**bool Begin()** Initializes communication with the sensor and configures the sensor driver for the specified transducer. True is returned if communication is able to be established with the sensor and configuration completes successfully, otherwise, false is returned.
+**bool Begin()** Initializes communication with the sensor and configures the sensor driver for the specified transducer. True is returned if communication is able to be established with the sensor and configuration completes successfully, otherwise, false is returned. The communication bus is not initialized within this library and must be initialized seperately; this enhances compatibility with other sensors that may on the same bus.
 
 ```C++
+Wire.begin();
+Wire.setClock(400000);
 bool status = ams.Begin();
 if (!status) {
   // ERROR
@@ -68,23 +109,23 @@ if (ams.Read()) {
 }
 ```
 
-**float pressure_pa()** Returns the pressure data from the Ams5812 object in units of Pa.
+**float pres_pa()** Returns the pressure data from the Ams5812 object in units of Pa.
 
 ```C++
-float pressure = ams.pressure_pa();
+float pressure = ams.pres_pa();
 ```
 
-**float die_temperature_c** Returns the die temperature of the sensor from the Ams5812 object in units of degrees C.
+**float die_temp_c** Returns the die temperature of the sensor from the Ams5812 object in units of degrees C.
 
 ```C++
-float temperature = ams.die_temperature_c();
+float temperature = ams.die_temp_c();
 ```
 
-## Example List
+# Example List
 * **ams5812_example**: demonstrates declaring an object, initializing the sensor, and collecting data. In this example the sensor is an AMS5812-0008-D with a sensor address of 0x06 located on I2C bus 0. 
 
 # Wiring and Pullups
-Please refer to the [Analog Microelectronics AMS 5812 datasheet](https://github.com/bolderflight/ams5812-arduino/blob/main/docs/ams5812.pdf) and your microcontroller's pinout diagram.
+Please refer to the [Analog Microelectronics AMS 5812 datasheet](docs/ams5812.pdf) and your microcontroller's pinout diagram.
 
 The silver dot on the AMS 5812 marks the location of Pin 1. The AMS 5812 pinout is:
 
