@@ -23,13 +23,17 @@
 * IN THE SOFTWARE.
 */
 
-#include "ams5812/ams5812.h"
+#include "ams5812.h"  // NOLINT
+#if defined(ARDUINO)
+#include "Arduino.h"
+#include "Wire.h"
+#else
 #include "core/core.h"
-#include "units/units.h"
+#endif
 
 namespace bfs {
 
-Ams5812::Ams5812(TwoWire *bus, uint8_t addr, Transducer type) {
+Ams5812::Ams5812(TwoWire *bus, const uint8_t addr, const Transducer type) {
   bus_ = bus;
   addr_ = addr;
   switch (type) {
@@ -147,10 +151,8 @@ Ams5812::Ams5812(TwoWire *bus, uint8_t addr, Transducer type) {
   pres_range_psi_ = max_pres_psi_ - min_pres_psi_;
 }
 bool Ams5812::Begin() {
-  bus_->begin();
-  bus_->setClock(I2C_CLOCK_);
   /* Checking to see if we can communicate with sensor */
-  for (std::size_t tries = 0; tries < MAX_TRIES_; tries++) {
+  for (size_t tries = 0; tries < MAX_TRIES_; tries++) {
     if (Read()) {
       return true;
     }
@@ -159,24 +161,22 @@ bool Ams5812::Begin() {
   return false;
 }
 bool Ams5812::Read() {
-  uint8_t buf[4];
-  std::size_t bytes_req = sizeof(buf);
-  std::size_t bytes_rx = bus_->requestFrom(addr_, bytes_req);
-  if (bytes_rx != bytes_req) {
+  bytes_rx_ = bus_->requestFrom(addr_, sizeof(buf_));
+  if (bytes_rx_ != sizeof(buf_)) {
     return false;
   }
-  for (std::size_t i = 0; i < bytes_rx; i++) {
-    buf[i] = bus_->read();
+  for (size_t i = 0; i < bytes_rx_; i++) {
+    buf_[i] = bus_->read();
   }
-  uint16_t pres_cnts = static_cast<uint16_t>(buf[0] & 0x7F) << 8 | buf[1];
-  uint16_t temp_cnts = static_cast<uint16_t>(buf[2] & 0x7F) << 8 | buf[3];
-  float pres_psi = static_cast<float>(pres_cnts - DIG_OUT_PMIN_) /
-                   DIG_OUT_PRANGE_ * pres_range_psi_ + min_pres_psi_;
-  float temp_c = static_cast<float>(temp_cnts - DIG_OUT_TMIN_) /
-                 DIG_OUT_TRANGE_ * T_RANGE_C_ + MIN_T_C_;
-  if (temp_c > MAX_T_C_) {return false;}
-  pres_pa_ = convpres(pres_psi, PresUnit::PSI, PresUnit::PA);
-  temp_c_ = temp_c;
+  pres_cnts_ = static_cast<uint16_t>(buf_[0] & 0x7F) << 8 | buf_[1];
+  temp_cnts_ = static_cast<uint16_t>(buf_[2] & 0x7F) << 8 | buf_[3];
+  pres_psi_ = static_cast<float>(pres_cnts_ - PMIN_) / PRANGE_ *
+              pres_range_psi_ + min_pres_psi_;
+  temp_ = static_cast<float>(temp_cnts_ - TMIN_) / TRANGE_ * T_RANGE_C_ +
+          MIN_T_C_;
+  if (temp_ > MAX_T_C_) {return false;}
+  pres_pa_ = pres_psi_ * PSI2PA_;
+  temp_c_ = temp_;
   return true;
 }
 

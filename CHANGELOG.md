@@ -1,27 +1,20 @@
 # Changelog
 
+## v3.0.0
+- Merging Ams5812 and Ams5812-arduino, this is the first open tag between the two.
+
+## v2.0.1
+- Updated std::size_t to int to support microcontrollers without STL
+
 ## v2.0.0
-- Updated namespace to *bfs*
-- Updated to work with units v3.1.0
-
-## v1.0.5
-- Updated to work with core v2.0.4 and units 2.0.0
-- Updated to pull sources from GitHub instead of GitLab
-
-## v1.0.4
-- Updated to use TwoWire instead of i2c_t3 to support core v2.0.3 and to provide a common interface for Teensy 3.x and 4.x chips
-
-## v1.0.3
-- Updated to support Teensy 4.x
+- Updated to match our [AMS-5812 library](https://github.com/bolderflight/ams5812) for flight software
+- Updated license to MIT
 
 ## v1.0.2
-- Updated CONTRIBUTING
-- Updated *fetch_content* to use https instead of ssh
-- Updated *flash_mcu* to use local loader on Linux
+- Updated license to GPLV3.
 
 ## v1.0.1
-- Updated license to MIT
-- Specified versions for core and global_defs
+- Updated library.properties name.
 
 ## v1.0.0
-- Initial baseline
+- Modified to work with Arduino 1.5 format and creating a baseline release now.

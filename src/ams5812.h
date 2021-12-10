@@ -23,16 +23,21 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef INCLUDE_AMS5812_AMS5812_H_
-#define INCLUDE_AMS5812_AMS5812_H_
+#ifndef SRC_AMS5812_H_
+#define SRC_AMS5812_H_
 
+#if defined(ARDUINO)
+#include "Arduino.h"
+#include "Wire.h"
+#else
 #include "core/core.h"
+#endif
 
 namespace bfs {
 
 class Ams5812 {
  public:
-  enum Transducer {
+  enum Transducer : int8_t {
     AMS5812_0000_D,
     AMS5812_0001_D,
     AMS5812_0000_D_B,
@@ -55,39 +60,41 @@ class Ams5812 {
     AMS5812_0150_B,
     AMS5812_0150_A,
     AMS5812_0300_A};
-  Ams5812(TwoWire *bus, uint8_t addr, Transducer type);
+  Ams5812(TwoWire *bus, const uint8_t addr, const Transducer type);
   bool Begin();
   bool Read();
-  inline float pressure_pa() const {return pres_pa_;}
-  inline float die_temperature_c() const {return temp_c_;}
+  inline float pres_pa() const {return pres_pa_;}
+  inline float die_temp_c() const {return temp_c_;}
 
  private:
   /* Communication interface */
   TwoWire *bus_;
   uint8_t addr_;
-  static constexpr uint32_t I2C_CLOCK_ = 400000;
-  static constexpr std::size_t MAX_TRIES_ = 10;
+  static constexpr size_t MAX_TRIES_ = 10;
   /* Min and max pressure, millibar */
   float min_pres_psi_, max_pres_psi_, pres_range_psi_;
   /* Digital output at min and max pressure */
-  static constexpr uint16_t DIG_OUT_PMIN_ = 3277;
-  static constexpr uint16_t DIG_OUT_PMAX_ = 29491;
-  static constexpr float DIG_OUT_PRANGE_ =
-    static_cast<float>(DIG_OUT_PMAX_ - DIG_OUT_PMIN_);
+  static constexpr uint16_t PMIN_ = 3277;
+  static constexpr uint16_t PMAX_ = 29491;
+  static constexpr float PRANGE_ = static_cast<float>(PMAX_ - PMIN_);
   /* Digital output at min and max temperature */
-  static constexpr uint16_t DIG_OUT_TMIN_ = 3277;
-  static constexpr uint16_t DIG_OUT_TMAX_ = 29491;
-  static constexpr float DIG_OUT_TRANGE_ =
-    static_cast<float>(DIG_OUT_TMAX_ - DIG_OUT_TMIN_);
+  static constexpr uint16_t TMIN_ = 3277;
+  static constexpr uint16_t TMAX_ = 29491;
+  static constexpr float TRANGE_ = static_cast<float>(TMAX_ - TMIN_);
   /* Minimum and maximum temperature */
   static constexpr float MIN_T_C_ = -25.0f;
   static constexpr float MAX_T_C_ = 85.0f;
   static constexpr float T_RANGE_C_ = MAX_T_C_ - MIN_T_C_;
   /* Data */
+  static constexpr float PSI2PA_ = (0.45359237f * 9.80665f) /
+                                   (0.0254f * 0.0254f);
+  uint8_t buf_[4];
+  uint8_t bytes_rx_;
+  uint16_t pres_cnts_, temp_cnts_;
+  float pres_psi_, temp_;
   float pres_pa_, temp_c_;
 };
 
 }  // namespace bfs
 
-
-#endif  // INCLUDE_AMS5812_AMS5812_H_
+#endif  // SRC_AMS5812_H_
