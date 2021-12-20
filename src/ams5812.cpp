@@ -30,6 +30,7 @@
 #else
 #include "core/core.h"
 #endif
+#include "units.h"  // NOLINT
 
 namespace bfs {
 
@@ -175,7 +176,7 @@ bool Ams5812::Read() {
   temp_ = static_cast<float>(temp_cnts_ - TMIN_) / TRANGE_ * T_RANGE_C_ +
           MIN_T_C_;
   if (temp_ > MAX_T_C_) {return false;}
-  pres_pa_ = pres_psi_ * PSI2PA_;
+  pres_pa_ = convpres(pres_psi_, PresUnit::PSI, PresUnit::PA);
   temp_c_ = temp_;
   return true;
 }
