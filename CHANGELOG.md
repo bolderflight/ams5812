@@ -1,5 +1,8 @@
 # Changelog
 
+## v3.0.1
+- Updated to use the Units library for PSI to PA conversion
+
 ## v3.0.0
 - Merging Ams5812 and Ams5812-arduino, this is the first open tag between the two.
 
