@@ -2,7 +2,7 @@
 * Brian R Taylor
 * brian.taylor@bolderflight.com
 * 
-* Copyright (c) 2021 Bolder Flight Systems Inc
+* Copyright (c) 2022 Bolder Flight Systems Inc
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the “Software”), to
@@ -23,8 +23,8 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef SRC_AMS5812_H_
-#define SRC_AMS5812_H_
+#ifndef AMS5812_SRC_AMS5812_H_  // NOLINT
+#define AMS5812_SRC_AMS5812_H_
 
 #if defined(ARDUINO)
 #include "Arduino.h"
@@ -59,8 +59,11 @@ class Ams5812 {
     AMS5812_0150_D_B,
     AMS5812_0150_B,
     AMS5812_0150_A,
-    AMS5812_0300_A};
+    AMS5812_0300_A
+  };
+  Ams5812() {}
   Ams5812(TwoWire *bus, const uint8_t addr, const Transducer type);
+  void Config(TwoWire *bus, const uint8_t addr, const Transducer type);
   bool Begin();
   bool Read();
   inline float pres_pa() const {return pres_pa_;}
@@ -95,4 +98,4 @@ class Ams5812 {
 
 }  // namespace bfs
 
-#endif  // SRC_AMS5812_H_
+#endif  // AMS5812_SRC_AMS5812_H_ NOLINT

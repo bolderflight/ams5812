@@ -12,7 +12,7 @@ if (DEFINED MCU)
   set(CMAKE_TOOLCHAIN_FILE "${mcu_support_SOURCE_DIR}/cmake/cortex.cmake")
 	# Project information
 	project(Ams5812
-		VERSION 3.0.1
+		VERSION 3.1.0
 		DESCRIPTION "AMS5812 sensor driver"
 		LANGUAGES C CXX
 	)

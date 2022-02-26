@@ -2,7 +2,7 @@
 * Brian R Taylor
 * brian.taylor@bolderflight.com
 * 
-* Copyright (c) 2021 Bolder Flight Systems Inc
+* Copyright (c) 2022 Bolder Flight Systems Inc
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the “Software”), to
@@ -35,6 +35,123 @@
 namespace bfs {
 
 Ams5812::Ams5812(TwoWire *bus, const uint8_t addr, const Transducer type) {
+  bus_ = bus;
+  addr_ = addr;
+  switch (type) {
+    case AMS5812_0000_D: {
+      min_pres_psi_ = 0.0f;
+      max_pres_psi_ = 0.075f;
+      break;
+    }
+    case AMS5812_0001_D: {
+      min_pres_psi_ = 0.0f;
+      max_pres_psi_ = 0.15f;
+      break;
+    }
+    case AMS5812_0000_D_B: {
+      min_pres_psi_ = -0.075f;
+      max_pres_psi_ = 0.075f;
+      break;
+    }
+    case AMS5812_0001_D_B: {
+      min_pres_psi_ = -0.15f;
+      max_pres_psi_ = 0.15f;
+      break;
+    }
+    case AMS5812_0003_D: {
+      min_pres_psi_ = 0.0f;
+      max_pres_psi_ = 0.3f;
+      break;
+    }
+    case AMS5812_0008_D: {
+      min_pres_psi_ = 0.0f;
+      max_pres_psi_ = 0.8f;
+      break;
+    }
+    case AMS5812_0015_D: {
+      min_pres_psi_ = 0.0f;
+      max_pres_psi_ = 1.5f;
+      break;
+    }
+    case AMS5812_0003_D_B: {
+      min_pres_psi_ = -0.3f;
+      max_pres_psi_ = 0.3f;
+      break;
+    }
+    case AMS5812_0008_D_B: {
+      min_pres_psi_ = -0.8f;
+      max_pres_psi_ = 0.8f;
+      break;
+    }
+    case AMS5812_0015_D_B: {
+      min_pres_psi_ = -1.5f;
+      max_pres_psi_ = 1.5f;
+      break;
+    }
+    case AMS5812_0030_D: {
+      min_pres_psi_ = 0.0f;
+      max_pres_psi_ = 3.0f;
+      break;
+    }
+    case AMS5812_0050_D: {
+      min_pres_psi_ = 0.0f;
+      max_pres_psi_ = 5.0f;
+      break;
+    }
+    case AMS5812_0150_D: {
+      min_pres_psi_ = 0.0f;
+      max_pres_psi_ = 15.0f;
+      break;
+    }
+    case AMS5812_0300_D: {
+      min_pres_psi_ = 0.0f;
+      max_pres_psi_ = 30.0f;
+      break;
+    }
+    case AMS5812_0600_D: {
+      min_pres_psi_ = 0.0f;
+      max_pres_psi_ = 60.0f;
+      break;
+    }
+    case AMS5812_1000_D: {
+      min_pres_psi_ = 0.0f;
+      max_pres_psi_ = 100.0f;
+      break;
+    }
+    case AMS5812_0030_D_B: {
+      min_pres_psi_ = -3.0f;
+      max_pres_psi_ = 3.0f;
+      break;
+    }
+    case AMS5812_0050_D_B: {
+      min_pres_psi_ = -5.0f;
+      max_pres_psi_ = 5.0f;
+      break;
+    }
+    case AMS5812_0150_D_B: {
+      min_pres_psi_ = -15.0f;
+      max_pres_psi_ = 15.0f;
+      break;
+    }
+    case AMS5812_0150_B: {
+      min_pres_psi_ = 11.0f;
+      max_pres_psi_ = 17.5f;
+      break;
+    }
+    case AMS5812_0150_A: {
+      min_pres_psi_ = 0.0f;
+      max_pres_psi_ = 15.0f;
+      break;
+    }
+    case AMS5812_0300_A: {
+      min_pres_psi_ = 0.0f;
+      max_pres_psi_ = 30.0f;
+      break;
+    }
+  }
+  pres_range_psi_ = max_pres_psi_ - min_pres_psi_;
+}
+void Ams5812::Config(TwoWire *bus, const uint8_t addr, const Transducer type) {
   bus_ = bus;
   addr_ = addr;
   switch (type) {

@@ -26,12 +26,9 @@
 #include "ams5812.h"
 
 /*
-* An AMS5812 object, which is a
-* differential pressure sensure at I2C
-* address of 0x06, on I2C bus 0,
-* and is a AMS5812-0008-D
+* An AMS5812 object
 */
-bfs::Ams5812 diff_pres(&Wire, 0x06, bfs::Ams5812::AMS5812_0008_D);
+bfs::Ams5812 diff_pres;
 
 int main() {
   /* Serial to display data */
@@ -39,6 +36,11 @@ int main() {
   while(!Serial){}
   Wire.begin();
   Wire.setClock(400000);
+  /*
+  * I2C address of 0x06, on I2C bus 0,
+  * and is a AMS5812-0008-D
+  */
+  diff_pres.Config(&Wire, 0x06, bfs::Ams5812::AMS5812_0008_D);
   /* Starting communication with the static pressure transducer */
   if (!diff_pres.Begin()) {
     Serial.println("Error communicating with sensor");
