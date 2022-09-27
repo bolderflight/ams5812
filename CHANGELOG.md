@@ -1,5 +1,8 @@
 # Changelog
 
+## v3.2.0
+- Removed dependency on Units library
+
 ## v3.1.0
 - Added default constructor and a Config method to configure the sensor
 
