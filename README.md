@@ -3,7 +3,7 @@
 ![Bolder Flight Systems Logo](img/logo-words_75.png) &nbsp; &nbsp; ![Arduino Logo](img/arduino_logo_75.png)
 
 # Ams5812
-This library communicates with [AMS-5812](https://www.analog-micro.com/en/products/pressure-sensors/board-mount-pressure-sensors/ams5812/) pressure transducers and is compatible with Arduino ARM and CMake build systems.
+This library communicates with [AMS-5812](https://www.analog-micro.com/en/products/pressure-sensors/board-mount-pressure-sensors/ams5812/) pressure transducers and is compatible with Arduino and CMake build systems.
    * [License](LICENSE.md)
    * [Changelog](CHANGELOG.md)
    * [Contributing guide](CONTRIBUTING.md)
