@@ -1,5 +1,8 @@
 # Changelog
 
+## v3.2.1
+- Updated core to support MMOD
+
 ## v3.2.0
 - Removed dependency on Units library
 
