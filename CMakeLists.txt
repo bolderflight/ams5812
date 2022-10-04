@@ -12,7 +12,7 @@ if (DEFINED MCU)
   set(CMAKE_TOOLCHAIN_FILE "${mcu_support_SOURCE_DIR}/cmake/cortex.cmake")
   # Project information
   project(Ams5812
-    VERSION 3.2.1
+    VERSION 3.2.2
     DESCRIPTION "AMS5812 sensor driver"
     LANGUAGES C CXX
   )
@@ -23,7 +23,7 @@ if (DEFINED MCU)
   FetchContent_Declare(
     core
     GIT_REPOSITORY https://github.com/bolderflight/core.git
-    GIT_TAG v3.1.1
+    GIT_TAG v3.1.2
   )
   FetchContent_MakeAvailable(core)
   # Add the library target

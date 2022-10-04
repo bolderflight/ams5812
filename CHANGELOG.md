@@ -1,5 +1,8 @@
 # Changelog
 
+## v3.2.2
+- Updated core to v3.1.2
+
 ## v3.2.1
 - Updated core to support MMOD
 
